@@ -108,7 +108,16 @@ export default function TrainingPage() {
                 <Card title="Hyperparameters">
                   <dl className="grid gap-2 text-sm">
                     {Object.entries(data.hyperparameters ?? {}).map(([key, value]) => (
-                      <Row key={key} label={key.replace(/_/g, " ")} value={String(value)} />
+                      <Row
+                        key={key}
+                        label={
+                          key === "num_train_epochs" &&
+                          Number(data.hyperparameters?.max_steps ?? 0) > 0
+                            ? "num train epochs (config; max steps overrides it)"
+                            : key.replace(/_/g, " ")
+                        }
+                        value={String(value)}
+                      />
                     ))}
                   </dl>
                 </Card>

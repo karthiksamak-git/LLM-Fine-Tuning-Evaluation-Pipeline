@@ -32,9 +32,10 @@ test-results/
 *.pem
 
 # ---- Data / datasets ----
-data/
-results/
-datasets/
+# Root-anchored: web/public/data holds the generated dashboard artifacts and MUST be committed.
+/data/
+/results/
+/datasets/
 .cache/
 HF_HOME/
 hf_cache/

@@ -115,57 +115,81 @@ are stated in the block. Numbers are never hand-edited._
 
 <!-- RESULTS:START -->
 
-**Active profile:** `smoke` · device=`cpu` · profile=`smoke` · cpu=8 vCPU · ram=15.82 GB · precision=`fp32` · model `HuggingFaceTB/SmolLM2-135M-Instruct` · data fingerprint `5b252f05b727`
+**Active profile:** `cpu` · device=`cpu` · profile=`cpu` · cpu=8 vCPU · ram=15.82 GB · precision=`fp32` · model `HuggingFaceTB/SmolLM2-135M-Instruct` · data fingerprint `3376b0d18b41`
+
+> **Hardware honesty:** Only the CPU profile has been run: SmolLM2-135M-Instruct (134.5M params) in fp32 with no mixed precision on a CPU-only machine. These are NOT GPU results and do not describe Qwen2.5-0.5B or any bf16/fp16 run. The exact device, core count, RAM and library versions are recorded in the hardware badge and env.json.
 
 ### Before / after on the held-out test split
 
-Test n=24 · values are mean with 95% bootstrap CIs
+Test n=200 · mean with 95% bootstrap CIs
 
 | Run | Exact match | SQL valid | Execution match |
 | --- | --- | --- | --- |
-| `base_zero_shot` | 0.0% [0.0, 0.0] | 70.8% [50.0, 87.5] | 20.8% [8.3, 37.5] |
-| `base_few_shot` | 12.5% [0.0, 29.2] | 58.3% [37.5, 79.2] | 20.8% [8.2, 37.5] |
-| `finetuned_adapter` | 0.0% [0.0, 0.0] | 62.5% [45.7, 79.2] | 8.3% [0.0, 20.8] |
-| `finetuned_merged` | 0.0% [0.0, 0.0] | 62.5% [45.7, 79.2] | 8.3% [0.0, 20.8] |
+| `base_zero_shot` | 0.5% [0.0, 1.5] | 64.5% [57.5, 71.0] | 19.5% [14.5, 25.0] |
+| `base_few_shot` | 9.5% [5.5, 14.0] | 70.0% [63.5, 75.5] | 45.5% [38.5, 52.0] |
+| `finetuned_adapter` | 49.5% [43.0, 56.0] | 94.5% [91.0, 97.5] | 77.5% [71.5, 83.0] |
+| `finetuned_merged` | 49.5% [43.0, 56.0] | 94.5% [91.0, 97.5] | 77.5% [71.5, 83.0] |
 
 **Paired significance (McNemar) on execution match**
 
 | Comparison | Δ absolute | Δ relative | p-value | Significant (0.05) |
 | --- | --- | --- | --- | --- |
-| finetuned_adapter vs base_zero_shot | -12.50 pp | -60.0% | 0.2500 | no |
-| finetuned_adapter vs base_few_shot | -12.50 pp | -60.0% | 0.3750 | no |
-| finetuned_merged vs base_zero_shot | -12.50 pp | -60.0% | 0.2500 | no |
-| finetuned_merged vs base_few_shot | -12.50 pp | -60.0% | 0.3750 | no |
+| finetuned_adapter vs base_zero_shot | +58.00 pp | +297.4% | < 0.0001 | yes |
+| finetuned_adapter vs base_few_shot | +32.00 pp | +70.3% | < 0.0001 | yes |
+| finetuned_merged vs base_zero_shot | +58.00 pp | +297.4% | < 0.0001 | yes |
+| finetuned_merged vs base_few_shot | +32.00 pp | +70.3% | < 0.0001 | yes |
 
-**Training seeds:** 1 seed(s) — execution match 8.3% ± 0.0% (mean ± std). 1 completed training seed(s). The CPU budget only allowed a single seed; seed variance is not estimated.
+**Training seeds:** 1 seed(s) — execution match 77.5% ± 0.0% (mean ± std). 1 completed training seed(s). The CPU budget only allowed a single seed; seed variance is not estimated.
 
 ### Training
 
-- Steps: **8** · epochs completed: 0.5 · wall clock: 19.8 s
-- Trainable params: **1,221,120** (0.900% of 135,736,128)
+- Steps: **300** · epochs completed: 1.0 · wall clock: 1379.33 s
+- Trainable params: **4,884,480** (3.504% of 139,399,488)
 - Precision: `fp32` — mixed precision: not used (CPU device: no fp16/bf16 training benefit).
-- Throughput: 114.6 tokens/s (estimated) · peak RSS 1653.4 MB
+- Throughput: 123.5 tokens/s (estimated) · peak RSS 2813.5 MB
+
+### Ablations (selected on validation)
+
+| Grid | Value | Val execution match | Val exact match | Steps |
+| --- | --- | --- | --- | --- |
+| rank | `4` | 54.2% | 6.2% | 24 |
+| rank | `8` | 60.4% | 20.8% | 24 |
+| rank | `16` | 60.4% | 20.8% | 24 |
+| rank | `32` | 60.4% | 25.0% | 24 |
+| learning_rate | `5e-05` | 33.3% | 2.1% | 24 |
+| learning_rate | `0.0001` | 56.2% | 16.7% | 24 |
+| learning_rate | `0.0003` | 60.4% | 25.0% | 24 |
+| target_modules | `attention` | 56.2% | 12.5% | 24 |
+| target_modules | `all_linear` | 60.4% | 20.8% | 24 |
+| train_size | `0.05` | 58.3% | 25.0% | 24 |
+| train_size | `0.1` | 58.3% | 29.2% | 24 |
+| train_size | `0.25` | 60.4% | 20.8% | 24 |
+| train_size | `0.5` | 58.3% | 25.0% | 24 |
+| loss_masking | `full` | 56.2% | 14.6% | 24 |
+
+**Selection:** Best validation execution match per grid: rank=8 (60.4%), learning_rate=0.0003 (60.4%), target_modules=all_linear (60.4%), train_size=0.25 (60.4%), loss_masking=full (56.2%). Ties are broken toward the earlier (smaller) setting. The main run keeps the profile defaults; these points show sensitivity, not a re-tuned final config, because the CPU budget allowed only one seed.
 
 ### Forgetting checks
 
 | Check | Before | After | Δ | Direction |
 | --- | --- | --- | --- | --- |
-| WikiText-2 perplexity (↓ better) | 25.181 | 25.137 | -0.044 | improved |
-| ARC-Easy accuracy (↑ better, n=8) | 62.5% | 62.5% | +0.00 pp | improved |
+| WikiText-2 perplexity (↓ better) | 29.910 | 30.222 | +0.312 | degraded |
+| ARC-Easy accuracy (↑ better, n=100) | 50.0% | 51.0% | +1.00 pp | improved |
 
 ### Efficiency
 
 | Model | p50 latency | p95 latency | tokens/s |
 | --- | --- | --- | --- |
-| `base` | 1734.83 ms | 1815.91 ms | 18.32 |
-| `adapter_unmerged` | 2072.95 ms | 2162.67 ms | 15.35 |
-| `merged` | 1754.78 ms | 1819.44 ms | 18.2 |
+| `base` | 1722.94 ms | 1825.81 ms | 18.44 |
+| `adapter_unmerged` | 1668.05 ms | 1768.94 ms | 14.99 |
+| `merged` | 1353.68 ms | 1369.98 ms | 18.53 |
 
-Adapter size: **25.823 MB** · trained params 0.000% of 135,736,128
+Adapter size: **81.727 MB** · trained (LoRA) params 3.504% of 139,399,488 (4,884,480 parameters)
 
 Mixed precision: **mixed precision: not measured (device=cpu; no CUDA device available, so fp32 vs bf16/fp16 cannot be compared and is not simulated).**
 
 <!-- RESULTS:END -->
+
 
 
 ## Limitations
@@ -176,8 +200,9 @@ Mixed precision: **mixed precision: not measured (device=cpu; no CUDA device ava
   both possible; aggregate/JOIN-heavy queries are weakly discriminative.
 - **Small models.** SmolLM2-135M and Qwen2.5-0.5B are tiny; absolute accuracy is low by
   design and a fine-tune may move only a few points.
-- **Subset training.** The CPU profile trains on a 1,200-example subset, not the full 78k
-  rows, to fit the time budget of a 2 vCPU machine.
+- **Subset training.** The CPU profile trains on a 1,200-example subset (300 optimizer
+  steps, one epoch at effective batch 4), not the full 78k rows, to fit the CPU time budget.
+  The exact machine is recorded in the hardware badge and `env.json`.
 - **Few-shot baseline.** 3 exemplars chosen once from train (one per complexity bucket) and
   reused everywhere, so the few-shot number is not tuned.
 - **Single seed on CPU.** Seed variance is not estimated unless the budget allows ≥ 3 seeds.

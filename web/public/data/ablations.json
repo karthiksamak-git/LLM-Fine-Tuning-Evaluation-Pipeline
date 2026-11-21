@@ -1,0 +1,705 @@
+{
+  "schema_version": 1,
+  "profile": "cpu",
+  "task": "text_to_sql",
+  "dataset": "b-mc2/sql-create-context",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "hardware": {
+    "profile": "cpu",
+    "device": "cpu",
+    "gpu_name": null,
+    "vram_gb": null,
+    "ram_total_gb": 15.82,
+    "cpu_count_logical": 8,
+    "precision_label": "fp32"
+  },
+  "raw_hardware": {
+    "device": "cpu",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count_logical": 8,
+    "cpu_count_physical": 8,
+    "ram_total_gb": 15.82,
+    "nvidia_smi": null,
+    "gpu_available": false,
+    "gpu_name": null,
+    "vram_gb": null,
+    "capability": null,
+    "precision": {
+      "dtype_name": "float32",
+      "use_grad_scaler": false,
+      "use_autocast": false,
+      "autocast_dtype_name": null,
+      "label": "fp32",
+      "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+      "mixed_precision": false
+    }
+  },
+  "git_commit": "cb9e7fae20749fb946a341a637a95769bb8961cd",
+  "data_fingerprint": "3376b0d18b416dadfc60b43913327ddeee5159481cdd25652b8c43421c305f2e",
+  "generated_at": "2026-11-21T09:27:55+00:00",
+  "package_versions": {
+    "torch": "2.15.0+cpu",
+    "transformers": "5.23.0",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "sqlglot": "30.33.0"
+  },
+  "budget": {
+    "max_steps": 24,
+    "val_examples": 48,
+    "note": "Ablation points are budget-scaled: they train for fewer steps than the main run and are evaluated on a validation subset. Selection uses validation only; the test split is reported for the main configuration."
+  },
+  "points": [
+    {
+      "grid": "rank",
+      "value": 4,
+      "tag": "abl_rank_4",
+      "steps": 24,
+      "wall_clock_s": 88.69,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.0625,
+          "ci_low": 0.0,
+          "ci_high": 0.14583333333333334,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8125,
+          "ci_low": 0.7083333333333334,
+          "ci_high": 0.9166666666666666,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5416666666666666,
+          "ci_low": 0.3958333333333333,
+          "ci_high": 0.6875,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.5188727378845215,
+      "config": {
+        "lora_r": 4,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "rank",
+      "value": 8,
+      "tag": "abl_rank_8",
+      "steps": 24,
+      "wall_clock_s": 88.66,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.20833333333333334,
+          "ci_low": 0.10416666666666667,
+          "ci_high": 0.3125,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8541666666666666,
+          "ci_low": 0.75,
+          "ci_high": 0.9380208333333329,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4583333333333333,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.4205927550792694,
+      "config": {
+        "lora_r": 8,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "rank",
+      "value": 16,
+      "tag": "abl_rank_16",
+      "steps": 24,
+      "wall_clock_s": 135.64,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.20833333333333334,
+          "ci_low": 0.10416666666666667,
+          "ci_high": 0.3333333333333333,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8125,
+          "ci_low": 0.7083333333333334,
+          "ci_high": 0.9166666666666666,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4583333333333333,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3529756963253021,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "rank",
+      "value": 32,
+      "tag": "abl_rank_32",
+      "steps": 24,
+      "wall_clock_s": 94.49,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.25,
+          "ci_low": 0.125,
+          "ci_high": 0.375,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8333333333333334,
+          "ci_low": 0.7291666666666666,
+          "ci_high": 0.9375,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4583333333333333,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.302167683839798,
+      "config": {
+        "lora_r": 32,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "learning_rate",
+      "value": 5e-05,
+      "tag": "abl_learning_rate_5e-05",
+      "steps": 24,
+      "wall_clock_s": 93.81,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.020833333333333332,
+          "ci_low": 0.0,
+          "ci_high": 0.0625,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.5833333333333334,
+          "ci_low": 0.4375,
+          "ci_high": 0.7291666666666666,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.3333333333333333,
+          "ci_low": 0.20833333333333334,
+          "ci_high": 0.4791666666666667,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.6077326536178589,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 5e-05,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "learning_rate",
+      "value": 0.0001,
+      "tag": "abl_learning_rate_0p0001",
+      "steps": 24,
+      "wall_clock_s": 90.94,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.16666666666666666,
+          "ci_low": 0.0625,
+          "ci_high": 0.2708333333333333,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8333333333333334,
+          "ci_low": 0.7291666666666666,
+          "ci_high": 0.9375,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5625,
+          "ci_low": 0.4166666666666667,
+          "ci_high": 0.7083333333333334,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.4442037343978882,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0001,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "learning_rate",
+      "value": 0.0003,
+      "tag": "abl_learning_rate_0p0003",
+      "steps": 24,
+      "wall_clock_s": 89.62,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.25,
+          "ci_low": 0.125,
+          "ci_high": 0.375,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8541666666666666,
+          "ci_low": 0.75,
+          "ci_high": 0.9380208333333329,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4583333333333333,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3147062361240387,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0003,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "target_modules",
+      "value": "attention",
+      "tag": "abl_target_modules_attention",
+      "steps": 24,
+      "wall_clock_s": 68.18,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.125,
+          "ci_low": 0.041666666666666664,
+          "ci_high": 0.22916666666666666,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.7916666666666666,
+          "ci_low": 0.6875,
+          "ci_high": 0.8958333333333334,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5625,
+          "ci_low": 0.4166666666666667,
+          "ci_high": 0.7083333333333334,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.45230549573898315,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "attention",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "target_modules",
+      "value": "all_linear",
+      "tag": "abl_target_modules_all_linear",
+      "steps": 24,
+      "wall_clock_s": 90.1,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.20833333333333334,
+          "ci_low": 0.10416666666666667,
+          "ci_high": 0.3333333333333333,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8125,
+          "ci_low": 0.7083333333333334,
+          "ci_high": 0.9166666666666666,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4583333333333333,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3529756963253021,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "all_linear",
+        "loss_masking": "completion",
+        "train_size": 1200
+      }
+    },
+    {
+      "grid": "train_size",
+      "value": 0.05,
+      "tag": "abl_train_size_0p05",
+      "steps": 24,
+      "wall_clock_s": 92.04,
+      "train_examples": 60,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.25,
+          "ci_low": 0.14583333333333334,
+          "ci_high": 0.3958333333333333,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8333333333333334,
+          "ci_low": 0.7291666666666666,
+          "ci_high": 0.9375,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5833333333333334,
+          "ci_low": 0.4375,
+          "ci_high": 0.7291666666666666,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3494747281074524,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 60
+      }
+    },
+    {
+      "grid": "train_size",
+      "value": 0.1,
+      "tag": "abl_train_size_0p1",
+      "steps": 24,
+      "wall_clock_s": 91.13,
+      "train_examples": 120,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.2916666666666667,
+          "ci_low": 0.16666666666666666,
+          "ci_high": 0.4166666666666667,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8541666666666666,
+          "ci_low": 0.75,
+          "ci_high": 0.9375,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5833333333333334,
+          "ci_low": 0.4375,
+          "ci_high": 0.7291666666666666,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.34842848777770996,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 120
+      }
+    },
+    {
+      "grid": "train_size",
+      "value": 0.25,
+      "tag": "abl_train_size_0p25",
+      "steps": 24,
+      "wall_clock_s": 89.26,
+      "train_examples": 300,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.20833333333333334,
+          "ci_low": 0.10416666666666667,
+          "ci_high": 0.3333333333333333,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.8541666666666666,
+          "ci_low": 0.75,
+          "ci_high": 0.9375,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.6041666666666666,
+          "ci_low": 0.4791666666666667,
+          "ci_high": 0.75,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3521501421928406,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 300
+      }
+    },
+    {
+      "grid": "train_size",
+      "value": 0.5,
+      "tag": "abl_train_size_0p5",
+      "steps": 24,
+      "wall_clock_s": 93.49,
+      "train_examples": 600,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.25,
+          "ci_low": 0.125,
+          "ci_high": 0.375,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.875,
+          "ci_low": 0.7708333333333334,
+          "ci_high": 0.9583333333333334,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5833333333333334,
+          "ci_low": 0.4375,
+          "ci_high": 0.7291666666666666,
+          "n": 48
+        }
+      },
+      "eval_loss": 0.3462330102920532,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "completion",
+        "train_size": 600
+      }
+    },
+    {
+      "grid": "loss_masking",
+      "value": "full",
+      "tag": "abl_loss_masking_full",
+      "steps": 24,
+      "wall_clock_s": 92.52,
+      "train_examples": 1200,
+      "val": {
+        "n": 48,
+        "exact_match": {
+          "value": 0.14583333333333334,
+          "ci_low": 0.0625,
+          "ci_high": 0.25,
+          "n": 48
+        },
+        "is_valid": {
+          "value": 0.7916666666666666,
+          "ci_low": 0.6875,
+          "ci_high": 0.8958333333333334,
+          "n": 48
+        },
+        "execution_match": {
+          "value": 0.5625,
+          "ci_low": 0.4166666666666667,
+          "ci_high": 0.7083333333333334,
+          "n": 48
+        }
+      },
+      "eval_loss": 1.5641783475875854,
+      "config": {
+        "lora_r": 16,
+        "learning_rate": 0.0002,
+        "target_modules": "auto",
+        "loss_masking": "full",
+        "train_size": 1200
+      }
+    }
+  ],
+  "selection": {
+    "best_per_grid": {
+      "rank": {
+        "value": 8,
+        "val_execution_match": 0.6041666666666666
+      },
+      "learning_rate": {
+        "value": 0.0003,
+        "val_execution_match": 0.6041666666666666
+      },
+      "target_modules": {
+        "value": "all_linear",
+        "val_execution_match": 0.6041666666666666
+      },
+      "train_size": {
+        "value": 0.25,
+        "val_execution_match": 0.6041666666666666
+      },
+      "loss_masking": {
+        "value": "full",
+        "val_execution_match": 0.5625
+      }
+    },
+    "rationale": "Best validation execution match per grid: rank=8 (60.4%), learning_rate=0.0003 (60.4%), target_modules=all_linear (60.4%), train_size=0.25 (60.4%), loss_masking=full (56.2%). Ties are broken toward the earlier (smaller) setting. The main run keeps the profile defaults; these points show sensitivity, not a re-tuned final config, because the CPU budget allowed only one seed."
+  },
+  "env": {
+    "python_version": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.15.0+cpu",
+      "transformers": "5.23.0",
+      "peft": "0.22.0",
+      "accelerate": "1.16.0",
+      "datasets": "5.2.0",
+      "numpy": "2.5.5",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "sqlglot": "30.33.0"
+    },
+    "hardware": {
+      "device": "cpu",
+      "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "cpu_count_logical": 8,
+      "cpu_count_physical": 8,
+      "ram_total_gb": 15.82,
+      "nvidia_smi": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "vram_gb": null,
+      "capability": null,
+      "precision": {
+        "dtype_name": "float32",
+        "use_grad_scaler": false,
+        "use_autocast": false,
+        "autocast_dtype_name": null,
+        "label": "fp32",
+        "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+        "mixed_precision": false
+      }
+    },
+    "git_commit": "cb9e7fae20749fb946a341a637a95769bb8961cd",
+    "git_dirty": true,
+    "timestamp_utc": "2026-11-21T09:27:04+00:00",
+    "profile": "cpu",
+    "config": {
+      "profile": "cpu",
+      "run": {
+        "seed": 42,
+        "train_seeds": [
+          42
+        ],
+        "tag": "cpu-smollm2-135m"
+      },
+      "model": {
+        "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "max_seq_len": 320,
+        "load_dtype": "auto"
+      },
+      "data": {
+        "dataset": "b-mc2/sql-create-context",
+        "train_size": 1200,
+        "val_size": 200,
+        "test_size": 200,
+        "min_answer_chars": 5,
+        "max_answer_chars": 512,
+        "max_prompt_chars": 2400
+      },
+      "lora": {
+        "r": 16,
+        "alpha": 32,
+        "dropout": 0.05,
+        "target_modules": "auto"
+      },
+      "training": {
+        "num_train_epochs": 3.0,
+        "max_steps": 300,
+        "per_device_train_batch_size": 2,
+        "gradient_accumulation_steps": 2,
+        "learning_rate": 0.0002,
+        "weight_decay": 0.01,
+        "warmup_ratio": 0.03,
+        "lr_scheduler_type": "cosine",
+        "max_grad_norm": 0.3,
+        "gradient_checkpointing": false,
+        "eval_steps": 100,
+        "logging_steps": 10,
+        "save_total_limit": 1,
+        "loss_masking": "completion"
+      },
+      "eval": {
+        "max_new_tokens": 64,
+        "batch_size": 8,
+        "bootstrap_resamples": 1000,
+        "exec_timeout_s": 2.0,
+        "few_shot_k": 3,
+        "arc_subset": 100,
+        "wikitext_slice": 24
+      },
+      "efficiency": {
+        "latency_repeats": 8,
+        "batch_size": 1
+      }
+    }
+  }
+}

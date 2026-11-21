@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "profile": "cpu",
+  "task": "text_to_sql",
+  "dataset": "b-mc2/sql-create-context",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "hardware": {
+    "profile": "cpu",
+    "device": "cpu",
+    "gpu_name": null,
+    "vram_gb": null,
+    "ram_total_gb": 15.82,
+    "cpu_count_logical": 8,
+    "precision_label": "fp32"
+  },
+  "raw_hardware": {
+    "device": "cpu",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count_logical": 8,
+    "cpu_count_physical": 8,
+    "ram_total_gb": 15.82,
+    "nvidia_smi": null,
+    "gpu_available": false,
+    "gpu_name": null,
+    "vram_gb": null,
+    "capability": null,
+    "precision": {
+      "dtype_name": "float32",
+      "use_grad_scaler": false,
+      "use_autocast": false,
+      "autocast_dtype_name": null,
+      "label": "fp32",
+      "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+      "mixed_precision": false
+    }
+  },
+  "git_commit": "cb9e7fae20749fb946a341a637a95769bb8961cd",
+  "data_fingerprint": "3376b0d18b416dadfc60b43913327ddeee5159481cdd25652b8c43421c305f2e",
+  "generated_at": "2026-11-21T09:27:55+00:00",
+  "package_versions": {
+    "torch": "2.15.0+cpu",
+    "transformers": "5.23.0",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "sqlglot": "30.33.0"
+  },
+  "before": {
+    "label": "base",
+    "wikitext": {
+      "perplexity": 29.909637451171875,
+      "mean_nll": 3.398180812597275,
+      "tokens_scored": 2040,
+      "blocks": 8,
+      "block_size": 256,
+      "slice_lines": 24,
+      "dataset": "Salesforce/wikitext/wikitext-2-raw-v1 (test split, first 24 non-empty lines)"
+    },
+    "arc_easy": {
+      "accuracy": 0.5,
+      "n": 100,
+      "correct": 50,
+      "skipped": 0,
+      "method": "mean log-likelihood over answer options (hand-written scoring)",
+      "dataset": "allenai/ai2_arc/ARC-Easy (test split, first 100 scored items)"
+    }
+  },
+  "after": {
+    "label": "finetuned_adapter",
+    "wikitext": {
+      "perplexity": 30.221572875976562,
+      "mean_nll": 3.408556044101715,
+      "tokens_scored": 2040,
+      "blocks": 8,
+      "block_size": 256,
+      "slice_lines": 24,
+      "dataset": "Salesforce/wikitext/wikitext-2-raw-v1 (test split, first 24 non-empty lines)"
+    },
+    "arc_easy": {
+      "accuracy": 0.51,
+      "n": 100,
+      "correct": 51,
+      "skipped": 0,
+      "method": "mean log-likelihood over answer options (hand-written scoring)",
+      "dataset": "allenai/ai2_arc/ARC-Easy (test split, first 100 scored items)"
+    }
+  },
+  "delta": {
+    "wikitext_perplexity": {
+      "before": 29.909637451171875,
+      "after": 30.221572875976562,
+      "delta": 0.3119354248046875,
+      "relative_change": 0.010429261314649125,
+      "direction": "degraded"
+    },
+    "arc_easy_accuracy": {
+      "before": 0.5,
+      "after": 0.51,
+      "delta": 0.010000000000000009,
+      "direction": "improved",
+      "n": 100
+    }
+  },
+  "env": {
+    "python_version": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.15.0+cpu",
+      "transformers": "5.23.0",
+      "peft": "0.22.0",
+      "accelerate": "1.16.0",
+      "datasets": "5.2.0",
+      "numpy": "2.5.5",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "sqlglot": "30.33.0"
+    },
+    "hardware": {
+      "device": "cpu",
+      "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "cpu_count_logical": 8,
+      "cpu_count_physical": 8,
+      "ram_total_gb": 15.82,
+      "nvidia_smi": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "vram_gb": null,
+      "capability": null,
+      "precision": {
+        "dtype_name": "float32",
+        "use_grad_scaler": false,
+        "use_autocast": false,
+        "autocast_dtype_name": null,
+        "label": "fp32",
+        "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+        "mixed_precision": false
+      }
+    },
+    "git_commit": "ff05026638a6ff29cee26c140ab0eee12aae4f9b",
+    "git_dirty": true,
+    "timestamp_utc": "2026-11-21T09:00:16+00:00",
+    "profile": "cpu",
+    "config": {
+      "profile": "cpu",
+      "run": {
+        "seed": 42,
+        "train_seeds": [
+          42
+        ],
+        "tag": "cpu-smollm2-135m"
+      },
+      "model": {
+        "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "max_seq_len": 320,
+        "load_dtype": "auto"
+      },
+      "data": {
+        "dataset": "b-mc2/sql-create-context",
+        "train_size": 1200,
+        "val_size": 200,
+        "test_size": 200,
+        "min_answer_chars": 5,
+        "max_answer_chars": 512,
+        "max_prompt_chars": 2400
+      },
+      "lora": {
+        "r": 16,
+        "alpha": 32,
+        "dropout": 0.05,
+        "target_modules": "auto"
+      },
+      "training": {
+        "num_train_epochs": 3.0,
+        "max_steps": 300,
+        "per_device_train_batch_size": 2,
+        "gradient_accumulation_steps": 2,
+        "learning_rate": 0.0002,
+        "weight_decay": 0.01,
+        "warmup_ratio": 0.03,
+        "lr_scheduler_type": "cosine",
+        "max_grad_norm": 0.3,
+        "gradient_checkpointing": false,
+        "eval_steps": 100,
+        "logging_steps": 10,
+        "save_total_limit": 1,
+        "loss_masking": "completion"
+      },
+      "eval": {
+        "max_new_tokens": 64,
+        "batch_size": 8,
+        "bootstrap_resamples": 1000,
+        "exec_timeout_s": 2.0,
+        "few_shot_k": 3,
+        "arc_subset": 100,
+        "wikitext_slice": 24
+      },
+      "efficiency": {
+        "latency_repeats": 8,
+        "batch_size": 1
+      }
+    }
+  }
+}

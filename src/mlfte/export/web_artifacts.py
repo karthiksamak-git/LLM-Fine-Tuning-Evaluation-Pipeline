@@ -57,9 +57,10 @@ def validate_payload(name: str, payload: Any) -> None:
         raise ValueError("comparison.json: runs must be an object")
 
 CPU_NOTICE = (
-    "Only the CPU profile has been run. Model: SmolLM2-135M-Instruct (134.5M params), fp32, "
-    "no mixed precision, on a 2 vCPU / 3 GB RAM machine. These numbers are NOT GPU results "
-    "and do not describe Qwen2.5-0.5B or any bf16/fp16 run."
+    "Only the CPU profile has been run: SmolLM2-135M-Instruct (134.5M params) in fp32 with "
+    "no mixed precision on a CPU-only machine. These are NOT GPU results and do not describe "
+    "Qwen2.5-0.5B or any bf16/fp16 run. The exact device, core count, RAM and library "
+    "versions are recorded in the hardware badge and env.json."
 )
 
 

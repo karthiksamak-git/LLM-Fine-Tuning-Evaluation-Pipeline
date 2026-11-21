@@ -1,0 +1,4585 @@
+{
+  "schema_version": 1,
+  "profile": "cpu",
+  "task": "text_to_sql",
+  "dataset": "b-mc2/sql-create-context",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "hardware": {
+    "profile": "cpu",
+    "device": "cpu",
+    "gpu_name": null,
+    "vram_gb": null,
+    "ram_total_gb": 15.82,
+    "cpu_count_logical": 8,
+    "precision_label": "fp32"
+  },
+  "raw_hardware": {
+    "device": "cpu",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count_logical": 8,
+    "cpu_count_physical": 8,
+    "ram_total_gb": 15.82,
+    "nvidia_smi": null,
+    "gpu_available": false,
+    "gpu_name": null,
+    "vram_gb": null,
+    "capability": null,
+    "precision": {
+      "dtype_name": "float32",
+      "use_grad_scaler": false,
+      "use_autocast": false,
+      "autocast_dtype_name": null,
+      "label": "fp32",
+      "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+      "mixed_precision": false
+    }
+  },
+  "git_commit": "cb9e7fae20749fb946a341a637a95769bb8961cd",
+  "data_fingerprint": "3376b0d18b416dadfc60b43913327ddeee5159481cdd25652b8c43421c305f2e",
+  "generated_at": "2026-11-21T09:27:55+00:00",
+  "package_versions": {
+    "torch": "2.15.0+cpu",
+    "transformers": "5.23.0",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "sqlglot": "30.33.0"
+  },
+  "taxonomy": {
+    "base_zero_shot": {
+      "invalid_sql": 46,
+      "correct": 39,
+      "wrong_aggregation": 36,
+      "wrong_filter_value": 17,
+      "missing_or_extra_clause": 37,
+      "wrong_table_or_column": 25
+    },
+    "base_few_shot": {
+      "wrong_table_or_column": 42,
+      "invalid_sql": 18,
+      "correct": 91,
+      "wrong_aggregation": 42,
+      "result_mismatch_other": 4,
+      "wrong_filter_value": 3
+    },
+    "finetuned_adapter": {
+      "correct": 155,
+      "invalid_sql": 4,
+      "wrong_aggregation": 24,
+      "wrong_filter_value": 6,
+      "missing_or_extra_clause": 2,
+      "wrong_table_or_column": 7,
+      "result_mismatch_other": 2
+    },
+    "finetuned_merged": {
+      "correct": 155,
+      "invalid_sql": 4,
+      "wrong_aggregation": 24,
+      "wrong_filter_value": 6,
+      "missing_or_extra_clause": 2,
+      "wrong_table_or_column": 7,
+      "result_mismatch_other": 2
+    }
+  },
+  "taxonomy_labels": [
+    "extraction_failure",
+    "invalid_sql",
+    "wrong_table_or_column",
+    "wrong_aggregation",
+    "wrong_filter_value",
+    "missing_or_extra_clause",
+    "result_mismatch_other",
+    "correct"
+  ],
+  "outcomes": {
+    "fixed": 73,
+    "still_wrong": 36,
+    "still_correct": 82,
+    "regressed": 9
+  },
+  "primary": "finetuned_adapter",
+  "baseline": "base_few_shot",
+  "examples": [
+    {
+      "id": "075250cade485d95",
+      "category": "fixed",
+      "question": "What is Dupuy lowest area in km2?",
+      "schema": "CREATE TABLE table_name_22 (area__km_2__ INTEGER, name VARCHAR)",
+      "gold": "SELECT MIN(area__km_2__) FROM table_name_22 WHERE name = \"dupuy\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT area__km_2__ AS 'Dupuy's lowest area in km2' FROM table_name_22;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DUPEY.area_km_2__ as lowest_area, DUPEY.name as name FROM table_name_22 LEFT JOIN table_name_22 ON table_name_22.area__km_2__ = DUPEY.area",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(area__km_2__) FROM table_name_22 WHERE name = \"Dupuy\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(area__km_2__) FROM table_name_22 WHERE name = \"Dupuy\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "d5e8dc6842c9bd65",
+      "category": "fixed",
+      "question": "Drawn of 0, and a Games larger than 5 has what amount of highest points?",
+      "schema": "CREATE TABLE table_name_62 (points INTEGER, drawn VARCHAR, games VARCHAR)",
+      "gold": "SELECT MAX(points) FROM table_name_62 WHERE drawn = 0 AND games > 5",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT points, DATEDIFF(YEAR, date(points), date(points)) AS highest_points FROM table_name_62;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(DRAWED) FROM table_name_62 WHERE DRAWED = 0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(points) FROM table_name_62 WHERE drawn = 0 AND games > 5",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(points) FROM table_name_62 WHERE drawn = 0 AND games > 5",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "3c43941674b96d6c",
+      "category": "fixed",
+      "question": "What is the value in 2008 when the value for Tournament is year?",
+      "schema": "CREATE TABLE table_name_77 (tournament VARCHAR)",
+      "gold": "SELECT 2008 FROM table_name_77 WHERE tournament = \"year\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT t.year, t.name FROM tournament t WHERE t.year = 2008;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT year FROM table_name_77 WHERE year = 2008;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT 2008 FROM table_name_77 WHERE tournament = \"2008\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT 2008 FROM table_name_77 WHERE tournament = \"2008\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "3cc9a6d3b2878c8d",
+      "category": "fixed",
+      "question": "Who was the number 24 series written by?",
+      "schema": "CREATE TABLE table_name_36 (written_by VARCHAR, no_in_series VARCHAR)",
+      "gold": "SELECT written_by FROM table_name_36 WHERE no_in_series = 24",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_36 WHERE no_in_series = '24';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_36 WHERE no_in_series = '24' AND written_by = 'writer'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT written_by FROM table_name_36 WHERE no_in_series = \"24\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT written_by FROM table_name_36 WHERE no_in_series = \"24\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "d3a991c909cb3416",
+      "category": "fixed",
+      "question": "Name the trucks for scott neal",
+      "schema": "CREATE TABLE table_2187178_1 (truck_s_ VARCHAR, crew_chief VARCHAR)",
+      "gold": "SELECT truck_s_ FROM table_2187178_1 WHERE crew_chief = \"Scott Neal\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT t.truck_name, c.crew_chief FROM truck_s t JOIN crew_chief c ON t.truck_id = c.truck_id WHERE t.truck_name = 'scott neal'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT truck_s FROM table_2187178_1 WHERE crew_chief = \"scott neal\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT truck_s_ FROM table_2187178_1 WHERE crew_chief = \"scott neal\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT truck_s_ FROM table_2187178_1 WHERE crew_chief = \"scott neal\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "02ac4d29b69756aa",
+      "category": "fixed",
+      "question": "What is the Date for the actual title archie bunker's place?",
+      "schema": "CREATE TABLE table_name_42 (date VARCHAR, actual_title VARCHAR)",
+      "gold": "SELECT date FROM table_name_42 WHERE actual_title = \"archie bunker's place\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT date FROM table_name_42 WHERE actual_title = 'Bunker's Place';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT date FROM table_name_42 WHERE actual_title = \"actual_title\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT date FROM table_name_42 WHERE actual_title = \"Achiebunker's Place\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT date FROM table_name_42 WHERE actual_title = \"Achiebunker's Place\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "db7c71c55ceeef0b",
+      "category": "fixed",
+      "question": "Name the least amount of losses for 23 points",
+      "schema": "CREATE TABLE table_18703133_1 (losses INTEGER, points VARCHAR)",
+      "gold": "SELECT MIN(losses) FROM table_18703133_1 WHERE points = 23",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT LOSSES, POSITIONS FROM table_18703133_1 WHERE POSITIONS < 23 This query selects the least amount of losses for 23 points and returns the corresponding loss value.",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT LESS(losses, points) FROM table_18703133_1 WHERE points = 23;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(losses) FROM table_18703133_1 WHERE points = \"23\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(losses) FROM table_18703133_1 WHERE points = \"23\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "9e55c442bacfc7e5",
+      "category": "fixed",
+      "question": "How many productions are shown for rd 2?",
+      "schema": "CREATE TABLE table_26686908_2 (production VARCHAR, rd VARCHAR)",
+      "gold": "SELECT COUNT(production) FROM table_26686908_2 WHERE rd = \"Rd 2\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT count(*) FROM table_26686908_2;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(production) FROM table_26686908_2 WHERE production = \"2\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(production) FROM table_26686908_2 WHERE rd = \"2\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(production) FROM table_26686908_2 WHERE rd = \"2\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "55c0769e2a3d52e9",
+      "category": "fixed",
+      "question": "What was released on 1936-08-29?",
+      "schema": "CREATE TABLE table_name_40 (title VARCHAR, release_date VARCHAR)",
+      "gold": "SELECT title FROM table_name_40 WHERE release_date = \"1936-08-29\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT title, date_format(date, '%Y-%m-%d') AS release_date FROM table_name_40;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT title, YEAR FROM table_name_40 WHERE release_date = \"1936-08-29\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT title FROM table_name_40 WHERE release_date = \"1936-08-29\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT title FROM table_name_40 WHERE release_date = \"1936-08-29\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "9bfe45f121c919b3",
+      "category": "fixed",
+      "question": "Who are the rowers from the United States?",
+      "schema": "CREATE TABLE table_name_6 (rowers VARCHAR, country VARCHAR)",
+      "gold": "SELECT rowers FROM table_name_6 WHERE country = \"united states\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_6;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_6 WHERE country = 'US'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT rowers FROM table_name_6 WHERE country = \"us\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT rowers FROM table_name_6 WHERE country = \"us\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "585ecf72a42ec8ad",
+      "category": "fixed",
+      "question": "What is the sum of the FAC/LC apps with less than 25 PC apps and a UEFA YC less than 0?",
+      "schema": "CREATE TABLE table_name_11 (fac___lc_apps INTEGER, pl_apps VARCHAR, UEfa_yc VARCHAR)",
+      "gold": "SELECT SUM(fac___lc_apps) FROM table_name_11 WHERE pl_apps < 25 AND UEfa_yc < 0",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT pl_apps FROM table_name_11 GROUP BY pl_apps HAVING COUNT(UEfa_yc) > 25 HAVING COUNT(UEfa_yc) < 0 This query uses",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT sum(FAC/LC) FROM table_name_11 WHERE FAC > 25 AND UEFA < 0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT SUM(fac___lc_apps) FROM table_name_11 WHERE pl_apps < 25 AND UEfa_yc < 0",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT SUM(fac___lc_apps) FROM table_name_11 WHERE pl_apps < 25 AND UEfa_yc < 0",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e57f78b2e1f3ed9c",
+      "category": "fixed",
+      "question": "What was the score when they played the Boston Patriots?",
+      "schema": "CREATE TABLE table_name_91 (result VARCHAR, opponent VARCHAR)",
+      "gold": "SELECT result FROM table_name_91 WHERE opponent = \"boston patriots\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) AS score FROM table_name_91;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(result.score) FROM table_name_91 WHERE opponent = \"Boston Patriots\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT result FROM table_name_91 WHERE opponent = \"Boston Patriots\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT result FROM table_name_91 WHERE opponent = \"Boston Patriots\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "1048020c15a5f607",
+      "category": "fixed",
+      "question": "What's the mintage when the theme was year of the rabbit?",
+      "schema": "CREATE TABLE table_name_18 (mintage VARCHAR, theme VARCHAR)",
+      "gold": "SELECT mintage FROM table_name_18 WHERE theme = \"year of the rabbit\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT m_year, m_theme FROM table_name_18;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIMESTATE, MIMESTATE_YEAR FROM table_name_18 WHERE theme = \"rabbit\" AND MIMESTATE = \"2020\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT mintage FROM table_name_18 WHERE theme = \"year of the rabbit\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT mintage FROM table_name_18 WHERE theme = \"year of the rabbit\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "f3ceb352e04f7327",
+      "category": "fixed",
+      "question": "Who directed the film that received an award of \u00a36,245?",
+      "schema": "CREATE TABLE table_name_10 (director_s_ VARCHAR, award VARCHAR)",
+      "gold": "SELECT director_s_ FROM table_name_10 WHERE award = \"\u00a36,245\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT director_s FROM table_name_10;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT director_s FROM table_name_10 WHERE award = '\u00a36,245'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT director_s_ FROM table_name_10 WHERE award = \"\u00a36,245\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT director_s_ FROM table_name_10 WHERE award = \"\u00a36,245\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "8c17c5123a001161",
+      "category": "fixed",
+      "question": "What is the Score of the Tournament played on Clay Surface on May 5, 1999?",
+      "schema": "CREATE TABLE table_name_42 (score VARCHAR, surface VARCHAR, date VARCHAR)",
+      "gold": "SELECT score FROM table_name_42 WHERE surface = \"clay\" AND date = \"may 5, 1999\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT score FROM table_name_42 WHERE date = 'May 5, 1999';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(score) FROM table_name_42 WHERE date = 'May 5, 1999' AND surface = 'clay'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT score FROM table_name_42 WHERE surface = \"clay\" AND date = \"may 5, 1999\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT score FROM table_name_42 WHERE surface = \"clay\" AND date = \"may 5, 1999\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "9eafbb297a244097",
+      "category": "fixed",
+      "question": "What is the name of the actress that was nominated for best actress in a leading role in the film Chopin: Desire for love?",
+      "schema": "CREATE TABLE table_10236830_6 (actors_name VARCHAR, film_name VARCHAR, nomination VARCHAR)",
+      "gold": "SELECT actors_name FROM table_10236830_6 WHERE film_name = \"Chopin: Desire for Love\" AND nomination = \"Best Actress in a Leading Role\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT name FROM table_10236830_6 WHERE film_name = 'Couples' AND nom_name = 'Couples' This query selects the name of the actress who was nominated for the leading role in the film",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT actors_name, film_name, nom_name FROM table_10236830_6 WHERE nom_name = 'Anna' AND nom_name = 'Catherine' AND nom_name = 'Anna' AND nom_name = 'Anna'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT actors_name FROM table_10236830_6 WHERE film_name = \"chopin: desire for love\" AND nomination = \"best actress in a leading role in the film Chopin: Desire for love\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT actors_name FROM table_10236830_6 WHERE film_name = \"chopin: desire for love\" AND nomination = \"best actress in a leading role in the film Chopin: Desire for love\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "6ed4de54eb010a0a",
+      "category": "fixed",
+      "question": "Which Incumbent has a Republican of dan mansell?",
+      "schema": "CREATE TABLE table_name_73 (incumbent VARCHAR, republican VARCHAR)",
+      "gold": "SELECT incumbent FROM table_name_73 WHERE republican = \"dan mansell\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT CONTINATION_NAME, CONTINATION_NAME FROM table_name_73 WHERE CONTINATION_NAME = 'Dan Smith' This query selects the `CONTINATION_NAME` column from the `table_name_7",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT CONCURRENT_ID, CONCURRENT_NAME FROM table_name_73 WHERE CONCURRENT_NAME = 'Dan' AND CONCURRENT_NAME = 'Mr. Mr. Mr.'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT incumbent FROM table_name_73 WHERE republican = \"dan mansell\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT incumbent FROM table_name_73 WHERE republican = \"dan mansell\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "7f86a64988885099",
+      "category": "fixed",
+      "question": "How many Games have a Drawn smaller than 1, and a Lost larger than 4?",
+      "schema": "CREATE TABLE table_name_5 (games VARCHAR, drawn VARCHAR, lost VARCHAR)",
+      "gold": "SELECT COUNT(games) FROM table_name_5 WHERE drawn < 1 AND lost > 4",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT DISTINCT",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DISTINCT (DISTINCT games, DISTINCT drawn, DISTINCT lost) FROM table_name_5 WHERE games > 1 AND drawn > 1 AND lost > 4;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(games) FROM table_name_5 WHERE drawn < 1 AND lost > 4",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(games) FROM table_name_5 WHERE drawn < 1 AND lost > 4",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "5cba04d7631196d9",
+      "category": "fixed",
+      "question": "What's the fastest laps during the 1995 season having poles & podiums at 0?",
+      "schema": "CREATE TABLE table_name_2 (fastest_laps INTEGER, seasons VARCHAR, poles VARCHAR, podiums VARCHAR)",
+      "gold": "SELECT SUM(fastest_laps) FROM table_name_2 WHERE poles = 0 AND podiums = 0 AND seasons = \"1995\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT fastest_laps, seasons, poles, podiums FROM table_name_2 WHERE poles = '0' AND podiums = '0';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(T1.fastest_laps) FROM table_name_2 AS T1 JOIN table_name_2 AS T2 ON T1.mID = T2.mID AND T2.year = 1995 WHERE T2.poles = 0 AND T",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(fastest_laps) FROM table_name_2 WHERE poles = \"0\" AND podiums = \"0\" AND podiums = \"0\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(fastest_laps) FROM table_name_2 WHERE poles = \"0\" AND podiums = \"0\" AND podiums = \"0\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "0515c2e4dd4337ce",
+      "category": "fixed",
+      "question": "Tell me the constructor for clay regazzoni",
+      "schema": "CREATE TABLE table_name_24 (constructor VARCHAR, driver VARCHAR)",
+      "gold": "SELECT constructor FROM table_name_24 WHERE driver = \"clay regazzoni\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "with a column named `constructor` that",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT CONSTRAINT FK_clay_regazzoni_constructor_m_m_id FOREIGN KEY (constructor) REFERENCES",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT constructor FROM table_name_24 WHERE driver = \"clay regazzoni\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT constructor FROM table_name_24 WHERE driver = \"clay regazzoni\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "8bd49a86a278ef74",
+      "category": "fixed",
+      "question": "What was the highest number of students in attendance for the university of north texas?",
+      "schema": "CREATE TABLE table_28243691_1 (enrollment INTEGER, institution VARCHAR)",
+      "gold": "SELECT MAX(enrollment) FROM table_28243691_1 WHERE institution = \"University of North Texas\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT enrollment FROM table_28243691_1 WHERE institution = 'North Texas University';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(T1.enrollment) FROM table_28243691_1 JOIN table_18064020_21 ON T1.institution = table_18064020_21.institution AND T1",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(enrollment) FROM table_28243691_1 WHERE institution = \"north texas\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(enrollment) FROM table_28243691_1 WHERE institution = \"north texas\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "11e7766bdad22c69",
+      "category": "fixed",
+      "question": "What is the tyres for Didier pironi?",
+      "schema": "CREATE TABLE table_name_10 (tyres VARCHAR, driver VARCHAR)",
+      "gold": "SELECT tyres FROM table_name_10 WHERE driver = \"didier pironi\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_10 WHERE driver = 'Didier Pironi';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT tyres FROM table_name_10 WHERE driver = Didier pironi;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT tyres FROM table_name_10 WHERE driver = \"didier pironi\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT tyres FROM table_name_10 WHERE driver = \"didier pironi\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "1a1af69e735b03fb",
+      "category": "fixed",
+      "question": "Name the representative appointed by george w. bush with presentation of credentials 9 november 2007",
+      "schema": "CREATE TABLE table_name_65 (representative VARCHAR, appointed_by VARCHAR, presentation_of_credentials VARCHAR)",
+      "gold": "SELECT representative FROM table_name_65 WHERE appointed_by = \"george w. bush\" AND presentation_of_credentials = \"9 november 2007\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_65 WHERE appointed_by = 'george w. bush' AND presentation_of_credentials = '9 november 2007';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT REPRESENTATIVE, APPENDICIAL, PRESENTATION_OF_CREDENTIALS FROM table_name_65 WHERE REPRESENTATIVE = 'George W. Bush' AND APPENDICIAL = 'Nevada' AND PRESENTATION_OF_",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT representative FROM table_name_65 WHERE appointed_by = \"george w. bush\" AND presentation_of_credentials = \"9 november 2007\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT representative FROM table_name_65 WHERE appointed_by = \"george w. bush\" AND presentation_of_credentials = \"9 november 2007\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "af262ad6fce8ebdb",
+      "category": "fixed",
+      "question": "What was the date of the game with a decision of Niittymaki and when the Flyers had a record of 30\u201321\u20135?",
+      "schema": "CREATE TABLE table_name_26 (date VARCHAR, decision VARCHAR, record VARCHAR)",
+      "gold": "SELECT date FROM table_name_26 WHERE decision = \"niittymaki\" AND record = \"30\u201321\u20135\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT date, decision, record FROM table_name_26 WHERE date = '2022-01-01' AND decision = 'Niittymaki';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(YEAR) FROM table_name_26 WHERE decision = \"Niittymaki\" AND record = \"30\u201321\u20135\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT date FROM table_name_26 WHERE decision = \"Niittymaki\" AND record = \"30\u201321\u20135\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT date FROM table_name_26 WHERE decision = \"Niittymaki\" AND record = \"30\u201321\u20135\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "0ae66a6897b70b01",
+      "category": "fixed",
+      "question": "What is the Intercontinental Cup 1999 result for the team with a Copa Conmebol 1999 result of runner-up?",
+      "schema": "CREATE TABLE table_name_63 (intercontinental_cup_1999 VARCHAR, copa_conmebol_1999 VARCHAR)",
+      "gold": "SELECT intercontinental_cup_1999 FROM table_name_63 WHERE copa_conmebol_1999 = \"runner-up\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COPACUMEBLOX_1999, COPACUMEBLOX_1999 FROM table_name_63 WHERE COPACUMEBLOX_1999 = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_63 WHERE Copa_Conmebol_1999 = '1999' AND Intercontinental_Cup_1999 = '1999';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT intercontinental_cup_1999 FROM table_name_63 WHERE copa_conmebol_1999 = \"runner-up\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT intercontinental_cup_1999 FROM table_name_63 WHERE copa_conmebol_1999 = \"runner-up\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "835669f21f6016d6",
+      "category": "fixed",
+      "question": "What is the Musical Guest (Song performed) for the episode aired on 13 july 2008?",
+      "schema": "CREATE TABLE table_name_2 (musical_guest__song_performed_ VARCHAR, air_date VARCHAR)",
+      "gold": "SELECT musical_guest__song_performed_ FROM table_name_2 WHERE air_date = \"13 july 2008\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_2 WHERE song_performed_ = '13 july 2008';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(musical_guest__song_performed) FROM table_name_2 WHERE air_date = '13 july 2008'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT musical_guest__song_performed_ FROM table_name_2 WHERE air_date = \"13 july 2008\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT musical_guest__song_performed_ FROM table_name_2 WHERE air_date = \"13 july 2008\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "7ec7bf427ed30528",
+      "category": "fixed",
+      "question": "What is the nationality of Stromile Swift?",
+      "schema": "CREATE TABLE table_name_48 (nationality VARCHAR, player VARCHAR)",
+      "gold": "SELECT nationality FROM table_name_48 WHERE player = \"stromile swift\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT nationality FROM table_name_48;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT national_name, player FROM table_name_48 WHERE national_name = 'Stromile Swift';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT nationality FROM table_name_48 WHERE player = \"stromile swift\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT nationality FROM table_name_48 WHERE player = \"stromile swift\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "5ce59c19e02a9e2d",
+      "category": "fixed",
+      "question": "Where was the score 67-71-70=208?",
+      "schema": "CREATE TABLE table_name_26 (place VARCHAR, score VARCHAR)",
+      "gold": "SELECT place FROM table_name_26 WHERE score = 67 - 71 - 70 = 208",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT place, score FROM table_name_26 WHERE score = 67-71-70;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT place, SUM(score) FROM table_name_26 WHERE score = 67-71-70;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT place FROM table_name_26 WHERE score = \"67-71-70=208\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT place FROM table_name_26 WHERE score = \"67-71-70=208\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e40ff0200268c584",
+      "category": "fixed",
+      "question": "What was the lowest number of votes Scotland cast?",
+      "schema": "CREATE TABLE table_10128185_2 (scotland INTEGER)",
+      "gold": "SELECT MIN(scotland) FROM table_10128185_2",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT AVG(votes) FROM table_10128185_2;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT AVG(votes) FROM table_10128185_2 WHERE votes = 0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(scotland) FROM table_10128185_2",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(scotland) FROM table_10128185_2",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "ba55a1cdb8aca85d",
+      "category": "fixed",
+      "question": "What core clocks ( mhz ) have a 21.3 memory bandwidth ( gb/s )?",
+      "schema": "CREATE TABLE table_25839957_5 (core_clock___mhz__ VARCHAR, memory_bandwidth___gb_s__ VARCHAR)",
+      "gold": "SELECT core_clock___mhz__ FROM table_25839957_5 WHERE memory_bandwidth___gb_s__ = \"21.3\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT core_clock___mhz__ AS core_clock, memory_bandwidth___gb_s__ AS memory_bandwidth FROM table_25839957_5;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_25839957_5 WHERE core_clock___mhz__ = '21.3' AND memory_bandwidth___gb_s__ = '21.3'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT core_clock___mhz__ FROM table_25839957_5 WHERE memory_bandwidth___gb_s__ = \"21.3\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT core_clock___mhz__ FROM table_25839957_5 WHERE memory_bandwidth___gb_s__ = \"21.3\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "3a7ed4a24be9cbaa",
+      "category": "fixed",
+      "question": "What is the name of the opponent at the Herceg Novi tournament?",
+      "schema": "CREATE TABLE table_name_54 (opponent VARCHAR, tournament VARCHAR)",
+      "gold": "SELECT opponent FROM table_name_54 WHERE tournament = \"herceg novi\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT name FROM table_name_54;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT name FROM table_name_54 WHERE tournament = \"Herceg Novi\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT opponent FROM table_name_54 WHERE tournament = \"herceg novi\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT opponent FROM table_name_54 WHERE tournament = \"herceg novi\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "bdb352774faa1ffb",
+      "category": "fixed",
+      "question": "Name the frequency for part number of ac80566ue041dw",
+      "schema": "CREATE TABLE table_16729930_11 (frequency VARCHAR, part_number_s_ VARCHAR)",
+      "gold": "SELECT frequency FROM table_16729930_11 WHERE part_number_s_ = \"AC80566UE041DW\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT frequency FROM table_16729930_11 WHERE part_number_s = 'ac80566ue041dw' This query selects the frequency of the part number 'ac80566ue0",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT frequency FROM table_16729930_11 WHERE part_number_s = \"ac80566ue041dw\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT frequency FROM table_16729930_11 WHERE part_number_s_ = \"ac80566ue041dw\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT frequency FROM table_16729930_11 WHERE part_number_s_ = \"ac80566ue041dw\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "533a87fd4a387551",
+      "category": "fixed",
+      "question": "What Actor/Actress a Tenure of 2008\u20132011 played Stella Dagostino?",
+      "schema": "CREATE TABLE table_name_88 (actor_actress VARCHAR, tenure VARCHAR, character VARCHAR)",
+      "gold": "SELECT actor_actress FROM table_name_88 WHERE tenure = \"2008\u20132011\" AND character = \"stella dagostino\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT actor_actress FROM table_name_88 WHERE tenure = '2008-2011';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT actor_actress, MAX(T1.stars) FROM table_name_88 AS T1 JOIN table_name_88 AS T2 ON T1.mID = T2.mID WHERE T2.year = (SELECT MAX(YEAR) FROM Movie)",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT actor_actress FROM table_name_88 WHERE tenure = \"2008\u20132011\" AND character = \"stella dagostino\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT actor_actress FROM table_name_88 WHERE tenure = \"2008\u20132011\" AND character = \"stella dagostino\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "19030fae2375b524",
+      "category": "fixed",
+      "question": "What is the smallest third place finish?",
+      "schema": "CREATE TABLE table_2146364_2 (third_place INTEGER)",
+      "gold": "SELECT MIN(third_place) FROM table_2146364_2",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT MIN(third_place) AS smallest_third_place FROM table_2146364_2;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIN(T1.third_place) FROM table_2146364_2 WHERE T1.third_place = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(third_place) FROM table_2146364_2",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(third_place) FROM table_2146364_2",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "5a30f12dc652c021",
+      "category": "fixed",
+      "question": "What time slots have a 6.3 rating",
+      "schema": "CREATE TABLE table_11244302_1 (time_slot__est_ VARCHAR, rating VARCHAR)",
+      "gold": "SELECT time_slot__est_ FROM table_11244302_1 WHERE rating = \"6.3\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT time_slot__est_ FROM table_11244302_1 WHERE rating = '6.3' This query uses the `SELECT` statement to retrieve the `time_slot__est_` column from the `table_1",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT time_slot__est FROM table_11244302_1 WHERE rating = '6.3'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT time_slot__est_ FROM table_11244302_1 WHERE rating = \"6.3\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT time_slot__est_ FROM table_11244302_1 WHERE rating = \"6.3\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "006a05d3ead5de12",
+      "category": "fixed",
+      "question": "What was the score when the total was 75\u201353?",
+      "schema": "CREATE TABLE table_name_89 (score VARCHAR, total VARCHAR)",
+      "gold": "SELECT score FROM table_name_89 WHERE total = \"75\u201353\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT score, total FROM table_name_89;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(score) FROM table_name_89 WHERE total = 75-53;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT score FROM table_name_89 WHERE total = \"75\u201353\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT score FROM table_name_89 WHERE total = \"75\u201353\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "ded8cfa231a7661d",
+      "category": "fixed",
+      "question": "Smaller than 4, and a Silver larger than 0, and a Rank of 3, and a Bronze smaller than 6 then what is the sum of the gold?",
+      "schema": "CREATE TABLE table_name_77 (total INTEGER, bronze VARCHAR, rank VARCHAR, gold VARCHAR, silver VARCHAR)",
+      "gold": "SELECT SUM(total) FROM table_name_77 WHERE gold < 4 AND silver > 0 AND rank = \"3\" AND bronze < 6",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT gold + bronze + silver + bronze + gold FROM table_name_77;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(gold) FROM table_name_77 WHERE gold > 6;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT SUM(total) FROM table_name_77 WHERE bronze > 0 AND gold < 6 AND silver > 0 AND silver < 6",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT SUM(total) FROM table_name_77 WHERE bronze > 0 AND gold < 6 AND silver > 0 AND silver < 6",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "60ce0cdf08518c75",
+      "category": "fixed",
+      "question": "What were the drawn with points against at 416?",
+      "schema": "CREATE TABLE table_12828723_5 (drawn VARCHAR, points_against VARCHAR)",
+      "gold": "SELECT drawn FROM table_12828723_5 WHERE points_against = \"416\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_12828723_5 WHERE points_against = 416;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DISTINCT (SELECT DISTINCT draw FROM table_12828723_5 WHERE draw = 'drawn')) FROM table_12828723_5 WHERE draw = 'drawn';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT drawn FROM table_12828723_5 WHERE points_against = \"416\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT drawn FROM table_12828723_5 WHERE points_against = \"416\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "d82c1eea814fcf80",
+      "category": "fixed",
+      "question": "In the United Kingdom, what company has an unknown date and is an energy business?",
+      "schema": "CREATE TABLE table_name_35 (company VARCHAR, country VARCHAR, business VARCHAR, date VARCHAR)",
+      "gold": "SELECT company FROM table_name_35 WHERE business = \"energy\" AND date = \"unknown\" AND country = \"united kingdom\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT company, country, business, date FROM table_name_35;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_35 WHERE company = \"United Kingdom\" AND country = \"UK\" AND business = \"Energy\" AND date = \"2022-01-01\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT company FROM table_name_35 WHERE country = \"uk\" AND business = \"energy\" AND date = \"2022-01-01\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT company FROM table_name_35 WHERE country = \"uk\" AND business = \"energy\" AND date = \"2022-01-01\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "0031c9041ce5a290",
+      "category": "fixed",
+      "question": "What is the earliest year that the tournament was played in Cape Town, South Africa?",
+      "schema": "CREATE TABLE table_name_71 (year INTEGER, location VARCHAR)",
+      "gold": "SELECT MIN(year) FROM table_name_71 WHERE location = \"cape town, south africa\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT year FROM table_name_71 WHERE location = 'Cape Town';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT year FROM table_name_71 WHERE location = 'Cape Town'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(year) FROM table_name_71 WHERE location = \"cape Town, south africa\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(year) FROM table_name_71 WHERE location = \"cape Town, south africa\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "2001a2f9626d9686",
+      "category": "fixed",
+      "question": "Which Player has a Draft of 1994, a Pick larger than 8, a Round of 10, and a Nationality of canada?",
+      "schema": "CREATE TABLE table_name_89 (player VARCHAR, nationality VARCHAR, round VARCHAR, draft VARCHAR, pick VARCHAR)",
+      "gold": "SELECT player FROM table_name_89 WHERE draft = 1994 AND pick > 8 AND round = \"10\" AND nationality = \"canada\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT player, nationality, round, pick, draft, pick_size, pick_round, pick_nationality FROM table_name_89;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT player, NAT COLUMN(NATCOL) AS Nationality, MIN(round) AS Draft, MAX(round) AS Round, MIN(pick) AS Draft, MAX(pick) AS Round, MIN(pick) AS Draft, MAX(pick) AS Round, MIN(pick) AS Draft,",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT player FROM table_name_89 WHERE nationality = \"canada\" AND round > 10 AND pick > 8 AND draft = \"1994\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT player FROM table_name_89 WHERE nationality = \"canada\" AND round > 10 AND pick > 8 AND draft = \"1994\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "5ca7bf9a3752a721",
+      "category": "fixed",
+      "question": "When l (ot/so) is 22 (3/4), what is the season?",
+      "schema": "CREATE TABLE table_20833768_4 (season VARCHAR, l__ot_so_ VARCHAR)",
+      "gold": "SELECT season FROM table_20833768_4 WHERE l__ot_so_ = \"22 (3/4)\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT season FROM table_20833768_4 WHERE season = 22;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT season FROM table_20833768_4 WHERE l__ot_so = 22;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT season FROM table_20833768_4 WHERE l__ot_so_ = \"22 (3/4)\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT season FROM table_20833768_4 WHERE l__ot_so_ = \"22 (3/4)\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "aae556fdec9b77e9",
+      "category": "fixed",
+      "question": "List name of all tracks in Balls to the Wall.",
+      "schema": "CREATE TABLE tracks (name VARCHAR, genre_id VARCHAR); CREATE TABLE albums (id VARCHAR, title VARCHAR)",
+      "gold": "SELECT T2.name FROM albums AS T1 JOIN tracks AS T2 ON T1.id = T2.genre_id WHERE T1.title = \"Balls to the Wall\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT name, genre_id FROM tracks WHERE genre_id = 1;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT name, genre_id FROM tracks JOIN albums ON tracks.id = albums.id WHERE genre_id = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT name FROM tracks WHERE genre_id = \"balls to the wall\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT name FROM tracks WHERE genre_id = \"balls to the wall\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "2d71f621ada388b7",
+      "category": "fixed",
+      "question": "What date has dallas cowboys as the opponent?",
+      "schema": "CREATE TABLE table_name_91 (date VARCHAR, opponent VARCHAR)",
+      "gold": "SELECT date FROM table_name_91 WHERE opponent = \"dallas cowboys\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT date FROM table_name_91 WHERE opponent = 'Dallas Cowboys';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(D.date) FROM table_name_91 AS D WHERE D.date = D.date;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT date FROM table_name_91 WHERE opponent = \"dallas cowboys\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT date FROM table_name_91 WHERE opponent = \"dallas cowboys\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "cb2b517cca904e8e",
+      "category": "fixed",
+      "question": "What schools are accredited by COE?",
+      "schema": "CREATE TABLE table_2064747_1 (location_s_ VARCHAR, accreditation VARCHAR)",
+      "gold": "SELECT location_s_ FROM table_2064747_1 WHERE accreditation = \"COE\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT location_s, accreditation FROM table_2064747_1 WHERE location_s = 'COE' AND accreditation = '1' ORDER BY location_s;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COE.location_s, COE.accreditation FROM table_2064747_1 JOIN table_2064747_1 ON table_2064747_1.location_s = COE.location_s AND table",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT location_s_ FROM table_2064747_1 WHERE accreditation = \"coe\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT location_s_ FROM table_2064747_1 WHERE accreditation = \"coe\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "734144ccbb3e104a",
+      "category": "fixed",
+      "question": "Who is in January where April is chris cranston?",
+      "schema": "CREATE TABLE table_name_71 (january VARCHAR, april VARCHAR)",
+      "gold": "SELECT january FROM table_name_71 WHERE april = \"chris cranston\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_71 WHERE april = '2022-01-01' This query uses the `WHERE` clause to filter the result set based on the values of the `april` column in the `table_name_",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT AVG(january) FROM table_name_71 WHERE AVG(april) = 1",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT january FROM table_name_71 WHERE april = \"chris cranston\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT january FROM table_name_71 WHERE april = \"chris cranston\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "3ded65071f8d893d",
+      "category": "fixed",
+      "question": "What is Australia's score where they were in place t1?",
+      "schema": "CREATE TABLE table_name_43 (score VARCHAR, country VARCHAR, place VARCHAR)",
+      "gold": "SELECT score FROM table_name_43 WHERE country = \"australia\" AND place = \"t1\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT score FROM table_name_43 WHERE country = 'Australia' AND country = 'New Zealand';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_43 WHERE country = \"Australia\" AND place = \"New Zealand\" AND score = \"43\";",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT score FROM table_name_43 WHERE country = \"australia\" AND place = \"t1\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT score FROM table_name_43 WHERE country = \"australia\" AND place = \"t1\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "6dfeb4857a537116",
+      "category": "fixed",
+      "question": "What is Driver Brendan Gaughan's Pos?",
+      "schema": "CREATE TABLE table_name_29 (pos VARCHAR, driver VARCHAR)",
+      "gold": "SELECT pos FROM table_name_29 WHERE driver = \"brendan gaughan\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT pos FROM table_name_29;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT Driver.pos FROM table_name_29 WHERE Driver.pos = 29;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT pos FROM table_name_29 WHERE driver = \"david brendan gaughan\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT pos FROM table_name_29 WHERE driver = \"david brendan gaughan\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e55b651f348196e3",
+      "category": "fixed",
+      "question": "in how many dates the game was 2",
+      "schema": "CREATE TABLE table_30049462_3 (date VARCHAR, game VARCHAR)",
+      "gold": "SELECT COUNT(date) FROM table_30049462_3 WHERE game = 2",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT DATE(game) FROM table_30049462_3 This query selects the date of the game from the table `table_30049462_3`. The result is a string that represents the date in the format",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(T1.date) FROM table_30049462_3 AS T1 WHERE T1.date = \"2018-01-01\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(date) FROM table_30049462_3 WHERE game = \"2\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(date) FROM table_30049462_3 WHERE game = \"2\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "d6741e4d4095db0b",
+      "category": "fixed",
+      "question": "What is the Date of the castle with a Historic Scotland Ownership?",
+      "schema": "CREATE TABLE table_name_38 (date VARCHAR, ownership VARCHAR)",
+      "gold": "SELECT date FROM table_name_38 WHERE ownership = \"historic scotland\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT date, ownership FROM table_name_38;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(YEAR) FROM table_name_38 WHERE ownership = 'Historic Scotland'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT date FROM table_name_38 WHERE ownership = \"historic Scotland\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT date FROM table_name_38 WHERE ownership = \"historic Scotland\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "b6678c8584361785",
+      "category": "fixed",
+      "question": "Name the orchestra for ted varnick",
+      "schema": "CREATE TABLE table_name_41 (orchestra VARCHAR, songwriter_s_ VARCHAR)",
+      "gold": "SELECT orchestra FROM table_name_41 WHERE songwriter_s_ = \"ted varnick\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT ORDER BY songwriter_s_ DESC This query sorts the `songwriter_s_` column in descending order by the `songwriter_s_` column. The `ORDER BY` clause specifies the column to sort by, and the `DESC` keyword",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT ORDER BY ORDER BY songwriter_s_ DESC LIMIT 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT orchestra FROM table_name_41 WHERE songwriter_s_ = \"ted varnick\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT orchestra FROM table_name_41 WHERE songwriter_s_ = \"ted varnick\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e043899d11df0c5e",
+      "category": "fixed",
+      "question": "How many years had a formula of Grand Prix?",
+      "schema": "CREATE TABLE table_name_46 (year VARCHAR, formula VARCHAR)",
+      "gold": "SELECT COUNT(year) FROM table_name_46 WHERE formula = \"grand prix\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_46;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_46 WHERE formula = 'Grand Prix' SELECT COUNT(*) FROM table_name_46 WHERE formula = 'Grand Prix' SELECT COUNT(*) FROM table_name_46 WHERE formula = 'Grand Prix'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(year) FROM table_name_46 WHERE formula = \"Grand Prix\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(year) FROM table_name_46 WHERE formula = \"Grand Prix\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "ba20fbce796630d3",
+      "category": "fixed",
+      "question": "Who was the singer for the song numbered 3, with lyricist Dev Kohli?",
+      "schema": "CREATE TABLE table_name_97 (singer_s_ VARCHAR, lyricist VARCHAR, number VARCHAR)",
+      "gold": "SELECT singer_s_ FROM table_name_97 WHERE lyricist = \"dev kohli\" AND number = 3",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT singer_s_ AS singer_name, lyricist_l_ AS lyricist_name FROM table_name_97 WHERE number = 3;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT singer_s_ FROM table_name_97 WHERE lyricist = Dev Kohli;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT singer_s_ FROM table_name_97 WHERE lyricist = \"dev kohli\" AND number = 3",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT singer_s_ FROM table_name_97 WHERE lyricist = \"dev kohli\" AND number = 3",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "66a298123d965ab4",
+      "category": "fixed",
+      "question": "On what date was Stuart Potts the Man of the Match?",
+      "schema": "CREATE TABLE table_name_47 (date VARCHAR, man_of_the_match VARCHAR)",
+      "gold": "SELECT date FROM table_name_47 WHERE man_of_the_match = \"stuart potts\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT DATE(date) AS date_of_match FROM table_name_47;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DATE(T1.date) FROM table_name_47 AS T1 WHERE T1.date = T1.date;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT date FROM table_name_47 WHERE man_of_the_match = \"Stuart Potts\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT date FROM table_name_47 WHERE man_of_the_match = \"Stuart Potts\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "b63a855e52f80aa3",
+      "category": "fixed",
+      "question": "Which Captain 2 has a Result of ireland by 8 runs?",
+      "schema": "CREATE TABLE table_name_87 (captain_2 VARCHAR, result VARCHAR)",
+      "gold": "SELECT captain_2 FROM table_name_87 WHERE result = \"ireland by 8 runs\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT captain_2 FROM table_name_87 WHERE result = 8;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT captain_2 FROM table_name_87 WHERE result = ireland",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT captain_2 FROM table_name_87 WHERE result = \"ireland by 8 runs\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT captain_2 FROM table_name_87 WHERE result = \"ireland by 8 runs\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "0ae5cfce23ef7eb3",
+      "category": "fixed",
+      "question": "What is the average round when there is a defensive back and an overall smaller than 199?",
+      "schema": "CREATE TABLE table_name_49 (round INTEGER, position VARCHAR, overall VARCHAR)",
+      "gold": "SELECT AVG(round) FROM table_name_49 WHERE position = \"defensive back\" AND overall < 199",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT AVG(round(total_round, 1)) FROM table_name_49;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT AVG(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(round(",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT AVG(round) FROM table_name_49 WHERE position = \"defensive back\" AND overall < 199",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT AVG(round) FROM table_name_49 WHERE position = \"defensive back\" AND overall < 199",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "4a2f6bb1a29883fd",
+      "category": "fixed",
+      "question": "What is the Catalog Number is for the Japan region?",
+      "schema": "CREATE TABLE table_name_59 (catalog VARCHAR, region VARCHAR)",
+      "gold": "SELECT catalog FROM table_name_59 WHERE region = \"japan\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_59;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_59 WHERE region = 'Japan'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT catalog FROM table_name_59 WHERE region = \"japan\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT catalog FROM table_name_59 WHERE region = \"japan\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "a78ffeb64e5eedc7",
+      "category": "fixed",
+      "question": "How many verbs mean to grow, to produce",
+      "schema": "CREATE TABLE table_1745843_10 (part_1 VARCHAR, verb_meaning VARCHAR)",
+      "gold": "SELECT COUNT(part_1) FROM table_1745843_10 WHERE verb_meaning = \"to grow, to produce\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT verb_meaning FROM table_1745843_10;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(V1.verb_meaning) FROM table_1745843_10 AS V1 WHERE V1.verb_meaning = \"grow\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(part_1) FROM table_1745843_10 WHERE verb_meaning = \"to grow, to produce\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(part_1) FROM table_1745843_10 WHERE verb_meaning = \"to grow, to produce\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "a31e047aa7edca51",
+      "category": "fixed",
+      "question": "Which Trident version has a Gecko value of 19.0?",
+      "schema": "CREATE TABLE table_name_57 (trident VARCHAR, gecko VARCHAR)",
+      "gold": "SELECT trident FROM table_name_57 WHERE gecko = \"19.0\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_57 WHERE trident = 19.0;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT TRIDENT_VERSION FROM table_name_57 WHERE TRIDENT_VERSION = 19.0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT trident FROM table_name_57 WHERE gecko = \"19.0\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT trident FROM table_name_57 WHERE gecko = \"19.0\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "80ada730de14a0f8",
+      "category": "fixed",
+      "question": "Which hanzi's launch is before 2009, when the language was tibetan, and the name was qinghai tibetian general channel?",
+      "schema": "CREATE TABLE table_name_71 (hanzi VARCHAR, name VARCHAR, launch VARCHAR, language VARCHAR)",
+      "gold": "SELECT hanzi FROM table_name_71 WHERE launch < 2009 AND language = \"tibetan\" AND name = \"qinghai tibetian general channel\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_71 WHERE launch BETWEEN '2009' AND '2010' AND language BETWEEN 'tibetan' AND 'general channel' This query selects all columns from the table",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT HANZI, NAME, LANGUAGE, YEAR, LANGUAGE_NAME FROM table_name_71 WHERE launch = '2009' AND language = 'tibetan' AND name = 'qinghai tibetian general channel'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT hanzi FROM table_name_71 WHERE launch > 2009 AND language = \"tibetan\" AND name = \"qinghai tibetian general channel\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT hanzi FROM table_name_71 WHERE launch > 2009 AND language = \"tibetan\" AND name = \"qinghai tibetian general channel\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e929ae0e0b576fbf",
+      "category": "fixed",
+      "question": "What was the score of the game when the record was 59-65?",
+      "schema": "CREATE TABLE table_name_77 (score VARCHAR, record VARCHAR)",
+      "gold": "SELECT score FROM table_name_77 WHERE record = \"59-65\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT score, record FROM table_name_77;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_77 WHERE score = \"59-65\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT score FROM table_name_77 WHERE record = \"59-65\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT score FROM table_name_77 WHERE record = \"59-65\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "e487f3b5565b0764",
+      "category": "fixed",
+      "question": "When Embry-Riddle made it to the first semi finalist slot, list all the runners up.",
+      "schema": "CREATE TABLE table_11214772_2 (runner_up VARCHAR, semi_finalist__number1 VARCHAR)",
+      "gold": "SELECT runner_up FROM table_11214772_2 WHERE semi_finalist__number1 = \"Embry-Riddle\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_11214772_2 WHERE runner_up = 'Semi-Finalist' AND semi_finalist__number1 = '1' ORDER BY runner_up;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(T1.number1) FROM table_11214772_2 JOIN table_11214772_2 WHERE SUM(T1.number1) > 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT runner_up FROM table_11214772_2 WHERE semi_finalist__number1 = \" Embry-Riddle\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT runner_up FROM table_11214772_2 WHERE semi_finalist__number1 = \" Embry-Riddle\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "5e0df8af8bb96f6a",
+      "category": "fixed",
+      "question": "Name the to par with money of 200,000 for australia",
+      "schema": "CREATE TABLE table_name_30 (to_par VARCHAR, money___\u00a3__ VARCHAR, country VARCHAR)",
+      "gold": "SELECT to_par FROM table_name_30 WHERE money___\u00a3__ = \"200,000\" AND country = \"australia\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT to_par, money, country FROM table_name_30;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT TO_PAR(TO_PAR, money___\u00a3__), country FROM table_name_30 WHERE money___\u00a3__ = 200000;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT to_par FROM table_name_30 WHERE money___\u00a3__ = \"200,000\" AND country = \"australia\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT to_par FROM table_name_30 WHERE money___\u00a3__ = \"200,000\" AND country = \"australia\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "d764655ba7101cdd",
+      "category": "fixed",
+      "question": "Team with average of 1.035?",
+      "schema": "CREATE TABLE table_name_79 (team VARCHAR, average VARCHAR)",
+      "gold": "SELECT team FROM table_name_79 WHERE average = 1.035",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT team, AVG(average) AS average FROM table_name_79;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT team, AVG(average) FROM table_name_79 WHERE average = 1.035;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT team FROM table_name_79 WHERE average = \"1.035\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT team FROM table_name_79 WHERE average = \"1.035\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "f9b3e70cc114451b",
+      "category": "fixed",
+      "question": "what's the mole with airdate being 8 january 2009",
+      "schema": "CREATE TABLE table_13036251_1 (the_mole VARCHAR, airdate VARCHAR)",
+      "gold": "SELECT the_mole FROM table_13036251_1 WHERE airdate = \"8 January 2009\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT mole FROM table_13036251_1 WHERE airdate = '8 january 2009';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT Mole.the_mole, Mole.airdate FROM table_13036251_1 LEFT JOIN table_13036251_1 ON Mole.airdate = Mole.the_mole WHERE Mole.airdate",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT the_mole FROM table_13036251_1 WHERE airdate = \"8 january 2009\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT the_mole FROM table_13036251_1 WHERE airdate = \"8 january 2009\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "2140eacccdc9f95a",
+      "category": "fixed",
+      "question": "Which Week 6 Oct 5 has a Week 14 Nov 30 of texas (11-1)?",
+      "schema": "CREATE TABLE table_name_37 (week_6_oct_5 VARCHAR, week_14_nov_30 VARCHAR)",
+      "gold": "SELECT week_6_oct_5 FROM table_name_37 WHERE week_14_nov_30 = \"texas (11-1)\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT week_6_oct_5, week_14_nov_30 FROM table_name_37 WHERE week_6_oct_5 = 11-1;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT week_6_oct_5, week_14_nov_30, T1.week_6_oct_5, T2.week_14_nov_30, T1.year FROM table_name_37 WHERE week_6_oct_5 = (",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT week_6_oct_5 FROM table_name_37 WHERE week_14_nov_30 = \"texas (11-1)\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT week_6_oct_5 FROM table_name_37 WHERE week_14_nov_30 = \"texas (11-1)\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        }
+      }
+    },
+    {
+      "id": "632d44287f7070e4",
+      "category": "regressed",
+      "question": "What is the grid sum with more than 50 laps?",
+      "schema": "CREATE TABLE table_name_16 (grid INTEGER, laps INTEGER)",
+      "gold": "SELECT SUM(grid) FROM table_name_16 WHERE laps > 50",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT grid_sum(grid) FROM table_name_16;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(grid) FROM table_name_16 WHERE grid > 50;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT grid FROM table_name_16 WHERE laps > 50",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT grid FROM table_name_16 WHERE laps > 50",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "d6c7fb745158d114",
+      "category": "regressed",
+      "question": "Who was the manager that was positioned 11th in table and resigned in departure?",
+      "schema": "CREATE TABLE table_name_30 (replaced_by VARCHAR, position_in_table VARCHAR, manner_of_departure VARCHAR)",
+      "gold": "SELECT replaced_by FROM table_name_30 WHERE position_in_table = \"11th\" AND manner_of_departure = \"resigned\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_30 WHERE position_in_table = '11th';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT * FROM table_name_30 WHERE position_in_table = \"11th\" AND manner_of_departure = \"replaced_by\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT replaced_by FROM table_name_30 WHERE manner_of_departure = \"11th\" AND resigned_in_departure = \"11th\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT replaced_by FROM table_name_30 WHERE manner_of_departure = \"11th\" AND resigned_in_departure = \"11th\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "a4b248dcdcd6bd3d",
+      "category": "regressed",
+      "question": "Name the maximum founded for blue hose",
+      "schema": "CREATE TABLE table_16168849_1 (founded INTEGER, nickname VARCHAR)",
+      "gold": "SELECT MAX(founded) FROM table_16168849_1 WHERE nickname = \"Blue Hose\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT CONSTRAINT fk_founded FOREIGN KEY (founded) REFERENCES table_16168849_1 (founded) This query checks if the `CONSTRAINT` constraint is present on the `table_1616",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(founded) FROM table_16168849_1 WHERE nickname = \"blue hose\"",
+          "execution_match": true,
+          "exact_match": true,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(founded) FROM table_16168849_1",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(founded) FROM table_16168849_1",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        }
+      }
+    },
+    {
+      "id": "4e60129e79d966a3",
+      "category": "regressed",
+      "question": "Who took office under the government of Matthew E. Welsh?",
+      "schema": "CREATE TABLE table_name_8 (took_office VARCHAR, governor VARCHAR)",
+      "gold": "SELECT took_office FROM table_name_8 WHERE governor = \"matthew e. welsh\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_8 WHERE took_office = 'Matthew E. Welsh';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT governor FROM table_name_8 WHERE took_office = \"Matthew E. Welsh\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT taken_office FROM table_name_8 WHERE governor = \"Matthew E. Welsh\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT taken_office FROM table_name_8 WHERE governor = \"Matthew E. Welsh\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "b49229b3adf084b2",
+      "category": "regressed",
+      "question": "What is the Motor that has a Focuses bigger than 62, and a Participant of rebaque?",
+      "schema": "CREATE TABLE table_name_73 (engine VARCHAR, points VARCHAR, entrant VARCHAR)",
+      "gold": "SELECT engine FROM table_name_73 WHERE points > 62 AND entrant = \"rebaque\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_73 WHERE engine = 'F1' AND points = '62' AND entrant = 'Participant';",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "base_few_shot": {
+          "prediction": "SELECT * FROM table_name_73 WHERE engine = \"Motor\" AND points = \"100\" AND entrant = \"Participant of rebaque\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(engine) FROM table_name_73 WHERE points > 62 AND entrant = \"rebeca\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(engine) FROM table_name_73 WHERE points > 62 AND entrant = \"rebeca\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "6778587213ad453c",
+      "category": "regressed",
+      "question": "What is the smallest bronze value associated with golds over 0, silvers over 11, and totals of 36?",
+      "schema": "CREATE TABLE table_name_63 (bronze INTEGER, silver VARCHAR, gold VARCHAR, total VARCHAR)",
+      "gold": "SELECT MIN(bronze) FROM table_name_63 WHERE gold > 0 AND total = 36 AND silver > 11",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT b * FROM table_name_63;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_63 WHERE bronze > 0 AND bronze < 11 AND bronze > 11 AND bronze > 36;",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_63 WHERE gold > 0 AND silvers > 11 AND total > 36",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_63 WHERE gold > 0 AND silvers > 11 AND total > 36",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "a534dabdb5322528",
+      "category": "regressed",
+      "question": "How many users are logged in?",
+      "schema": "CREATE TABLE users (user_login VARCHAR)",
+      "gold": "SELECT COUNT(*) FROM users WHERE user_login = 1",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM users;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM users WHERE user_login = 'user_login'",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(user_login) FROM users",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(user_login) FROM users",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "35015ccce4a59445",
+      "category": "regressed",
+      "question": "Find the last name of the author with first name \"Amal\".",
+      "schema": "CREATE TABLE authors (lname VARCHAR, fname VARCHAR)",
+      "gold": "SELECT lname FROM authors WHERE fname = \"Amal\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT last_name FROM authors;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT fname FROM authors WHERE lname = \"Amal\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT last_name FROM authors WHERE fname = \"amal\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT last_name FROM authors WHERE fname = \"amal\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "a2ec76554bc92d9a",
+      "category": "regressed",
+      "question": "What's the total of Lost that's got Points larger than 28, Draw of 5, and Place that's smaller than 1?",
+      "schema": "CREATE TABLE table_name_69 (lost INTEGER, place VARCHAR, points VARCHAR, draw VARCHAR)",
+      "gold": "SELECT SUM(lost) FROM table_name_69 WHERE points > 28 AND draw = 5 AND place < 1",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT place, points, draw FROM table_name_69 GROUP BY place, points, draw HAVING COUNT(draw) > 1 ORDER BY place ASC;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT SUM(points) FROM table_name_69 WHERE place = \"lost\" AND draw = \"5\" AND place = \"1\"",
+          "execution_match": true,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": null
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(lost) FROM table_name_69 WHERE points > 28 AND draw < 5 AND place = \"smaller than 1\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(lost) FROM table_name_69 WHERE points > 28 AND draw < 5 AND place = \"smaller than 1\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "f6c5ed7ddf1cbfba",
+      "category": "still_wrong",
+      "question": "What was the largest index the year/s forcible rapes numbered 1084?",
+      "schema": "CREATE TABLE table_25271777_1 (index INTEGER, forcible_rape VARCHAR)",
+      "gold": "SELECT MAX(index) FROM table_25271777_1 WHERE forcible_rape = 1084",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT index FROM table_25271777_1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(index) FROM table_25271777_1 WHERE index = 1084;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(index) FROM table_25271777_1 WHERE forcible_rape = \"1084\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(index) FROM table_25271777_1 WHERE forcible_rape = \"1084\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        }
+      }
+    },
+    {
+      "id": "114463dd2846b163",
+      "category": "still_wrong",
+      "question": "what is the points total for forti corse?",
+      "schema": "CREATE TABLE table_name_49 (points INTEGER, entrant VARCHAR)",
+      "gold": "SELECT SUM(points) FROM table_name_49 WHERE entrant = \"forti corse\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT points FROM table_name_49;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT points FROM table_name_49 WHERE entrant = \"forti corse\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT points FROM table_name_49 WHERE entrant = \"forti corse\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT points FROM table_name_49 WHERE entrant = \"forti corse\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "5a18ed90c58312da",
+      "category": "still_wrong",
+      "question": "1996[2] of 127, and a 1990 smaller than 120 is the sum of 1990?",
+      "schema": "CREATE TABLE table_name_89 (Id VARCHAR)",
+      "gold": "SELECT SUM(1980) FROM table_name_89 WHERE 1996[2] = 127 AND 1990 < 120",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT sum(1990) FROM table_name_89;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT sum(1990) FROM table_name_89 WHERE id = 1990;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT Id FROM table_name_89 WHERE 1996 = \"2\" AND 1990 < 120",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT Id FROM table_name_89 WHERE 1996 = \"2\" AND 1990 < 120",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "05ad6d6d37ea0962",
+      "category": "still_wrong",
+      "question": "What is the average week number of all the matches where less than 22,604 people attended?",
+      "schema": "CREATE TABLE table_name_75 (week INTEGER, attendance INTEGER)",
+      "gold": "SELECT AVG(week) FROM table_name_75 WHERE attendance < 22 OFFSET 604",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT AVG(attendance) FROM table_name_75;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT AVG(T1.week) FROM table_name_75 AS T1 WHERE T1.mID = 75 AND T1.year = 2020;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT AVG(week) FROM table_name_75 WHERE attendance < 22604",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT AVG(week) FROM table_name_75 WHERE attendance < 22604",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "44f59ad46238cd32",
+      "category": "still_wrong",
+      "question": "Which Round has a Player of todd fedoruk?",
+      "schema": "CREATE TABLE table_name_28 (round INTEGER, player VARCHAR)",
+      "gold": "SELECT SUM(round) FROM table_name_28 WHERE player = \"todd fedoruk\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT round, player FROM table_name_28;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT round, player FROM table_name_28 WHERE round = 28;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT round FROM table_name_28 WHERE player = \"todd fedoruk\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT round FROM table_name_28 WHERE player = \"todd fedoruk\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "abafe0d8de00624f",
+      "category": "still_wrong",
+      "question": "List the asset id, details, make and model for every asset.",
+      "schema": "CREATE TABLE Assets (asset_id VARCHAR, asset_details VARCHAR, asset_make VARCHAR, asset_model VARCHAR)",
+      "gold": "SELECT asset_id, asset_details, asset_make, asset_model FROM Assets",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT asset_id, asset_details, asset_make, asset_model FROM Assets GROUP BY asset_id;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT asset_id, asset_details, asset_make, asset_model FROM Assets WHERE asset_id = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT asset_id, asset_details, asset_make, asset_model FROM Assets WHERE asset_make = \"Samsung\" AND asset_model = \"Samsung S2\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT asset_id, asset_details, asset_make, asset_model FROM Assets WHERE asset_make = \"Samsung\" AND asset_model = \"Samsung S2\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        }
+      }
+    },
+    {
+      "id": "344b37d1623cfd99",
+      "category": "still_wrong",
+      "question": "WHAT ARE THE NAMES OF THE MENS DOUBLES WHEN THE WOMENS DOUBLES WAS PIRET HAMER HELEN REINO?",
+      "schema": "CREATE TABLE table_14903627_1 (mens_doubles VARCHAR, womens_doubles VARCHAR)",
+      "gold": "SELECT mens_doubles FROM table_14903627_1 WHERE womens_doubles = \"Piret Hamer Helen Reino\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT mens_doubles, womens_doubles FROM table_14903627_1 WHERE mens_doubles = 'HELEN REINO' This query selects the names of the men and women who were in",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MENS_DOUBLES, WOMEN_DOUBLES FROM table_14903627_1 WHERE MENS_DOUBLES = \"Mens Doubles\" AND WOMEN_DOUBLES = \"Womens Doubles\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT men_doubles FROM table_14903627_1 WHERE womens_doubles = \"PIRET HAMER HELEN REINO\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT men_doubles FROM table_14903627_1 WHERE womens_doubles = \"PIRET HAMER HELEN REINO\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "857ea5a263676daa",
+      "category": "still_wrong",
+      "question": "What's the smallest season for Montreal that's greater than 5,100 for capacity?",
+      "schema": "CREATE TABLE table_name_8 (first_season INTEGER, city VARCHAR, capacity VARCHAR)",
+      "gold": "SELECT MIN(first_season) FROM table_name_8 WHERE city = \"montreal\" AND capacity > 5 OFFSET 100",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT city, capacity FROM table_name_8 WHERE capacity > 5100;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIN(first_season) FROM table_name_8 WHERE capacity > 5100;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(first_season) FROM table_name_8 WHERE city > 5100 AND capacity > 500",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(first_season) FROM table_name_8 WHERE city > 5100 AND capacity > 500",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "ed0a16630b383308",
+      "category": "still_wrong",
+      "question": "How many international builders are there?",
+      "schema": "CREATE TABLE table_name_84 (total VARCHAR, builder VARCHAR)",
+      "gold": "SELECT total FROM table_name_84 WHERE builder = \"international\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT builder FROM table_name_84;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_84 WHERE builder = 'international'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(total) FROM table_name_84 WHERE builder = \"international builders\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(total) FROM table_name_84 WHERE builder = \"international builders\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "bd6967b6f264b8bc",
+      "category": "still_wrong",
+      "question": "What are the ids and names of the architects who built at least 3 bridges ?",
+      "schema": "CREATE TABLE architect (id VARCHAR, name VARCHAR); CREATE TABLE bridge (architect_id VARCHAR)",
+      "gold": "SELECT T1.id, T1.name FROM architect AS T1 JOIN bridge AS T2 ON T1.id = T2.architect_id GROUP BY T1.id HAVING COUNT(*) >= 3",
+      "bucket": "complex",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT name, architect_id FROM bridge;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT id, name FROM architect WHERE id = 3;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT id FROM architect WHERE name = \"3\" AND architect_id > 3",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT id FROM architect WHERE name = \"3\" AND architect_id > 3",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "0a0c23e9bad92b95",
+      "category": "still_wrong",
+      "question": "What was the highest number of starts in 2007 when the average start was over 17.6?",
+      "schema": "CREATE TABLE table_name_49 (starts INTEGER, year VARCHAR, avg_start VARCHAR)",
+      "gold": "SELECT MAX(starts) FROM table_name_49 WHERE year = 2007 AND avg_start > 17.6",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT AVG(start_year) AS avg_start FROM table_name_49;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(YEAR) FROM table_name_49 WHERE avg_start > 17.6;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(starts) FROM table_name_49 WHERE year > 2007 AND avg_start > 17.6",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(starts) FROM table_name_49 WHERE year > 2007 AND avg_start > 17.6",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        }
+      }
+    },
+    {
+      "id": "3df83f31d760166a",
+      "category": "still_wrong",
+      "question": "What is the captaincy for Defender that has less than 212 appearances and 12 goals?",
+      "schema": "CREATE TABLE table_name_89 (captaincy VARCHAR, appearances VARCHAR, goals VARCHAR, position_ VARCHAR, a_ VARCHAR)",
+      "gold": "SELECT captaincy FROM table_name_89 WHERE appearances < 212 AND goals = 12 AND position_[a_] = \"defender\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) AS captaincy, COUNT(*) AS appearances, COUNT(*) AS goals FROM table_name_89;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_89 WHERE a = 'Defender' AND goals = '12' AND position = 'Defender' AND a = '12'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT captaincy FROM table_name_89 WHERE a_ < 212 AND goals = \"12\" AND position_ = \"defender\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT captaincy FROM table_name_89 WHERE a_ < 212 AND goals = \"12\" AND position_ = \"defender\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "7bdc78aad1909284",
+      "category": "still_wrong",
+      "question": "How many figures are given for the region's total in 1947?",
+      "schema": "CREATE TABLE table_12555835_1 (population__region_total_ VARCHAR, year VARCHAR)",
+      "gold": "SELECT COUNT(population__region_total_) FROM table_12555835_1 WHERE year = 1947",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT population__region_total_ FROM table_12555835_1 WHERE year = '1947' This query selects the population total for the region in 1947 and returns it as a result.",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT population__region_total_ FROM table_12555835_1 WHERE year = \"1947\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT population__region_total_ FROM table_12555835_1 WHERE year = \"1947\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT population__region_total_ FROM table_12555835_1 WHERE year = \"1947\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "c05eabaa01a7c03c",
+      "category": "still_wrong",
+      "question": "What was the total attendance on September 12?",
+      "schema": "CREATE TABLE table_name_76 (attendance VARCHAR, date VARCHAR)",
+      "gold": "SELECT attendance FROM table_name_76 WHERE date = \"september 12\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT AVG(attendance) AS total_attendance FROM table_name_76;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT AVG(attendance) FROM table_name_76 WHERE date = 'September 12'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(attendance) FROM table_name_76 WHERE date = \"september 12\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(attendance) FROM table_name_76 WHERE date = \"september 12\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "277cfbfc9fb657d2",
+      "category": "still_wrong",
+      "question": "How many draws have less than 8 wins, and 31 goals for?",
+      "schema": "CREATE TABLE table_name_25 (draws INTEGER, wins VARCHAR, goals_for VARCHAR)",
+      "gold": "SELECT SUM(draws) FROM table_name_25 WHERE wins < 8 AND goals_for = 31",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT DISTINCT draws, wins, goals_for FROM table_name_25;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT DISTINCT draws, wins, goals_for FROM table_name_25 WHERE draws < 8 AND wins < 8 AND goals_for < 31;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(draws) FROM table_name_25 WHERE wins < 8 AND goals_for = \"31\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(draws) FROM table_name_25 WHERE wins < 8 AND goals_for = \"31\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "49b9f28b418a4b30",
+      "category": "still_wrong",
+      "question": "What is the name of the school with a decile of 1, a state authority, and located in Otahuhu?",
+      "schema": "CREATE TABLE table_name_41 (name VARCHAR, area VARCHAR, decile VARCHAR, authority VARCHAR)",
+      "gold": "SELECT name FROM table_name_41 WHERE decile = \"1\" AND authority = \"state\" AND area = \"otahuhu\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT name, area, decile, authority FROM table_name_41;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "missing_or_extra_clause"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT name, area, decile, authority FROM table_name_41 WHERE decile = 1 AND state_authority = 'Otahuhu' AND area = 'Otahuhu' AND authority = 'Otahuhu'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT name FROM table_name_41 WHERE decile = 1 AND state authority = \"otahuhu\" AND area = \"otahuhu\" AND authority = \"otahuhu\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT name FROM table_name_41 WHERE decile = 1 AND state authority = \"otahuhu\" AND area = \"otahuhu\" AND authority = \"otahuhu\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        }
+      }
+    },
+    {
+      "id": "5b592e551b544350",
+      "category": "still_wrong",
+      "question": "Show the locations that have more than one railways.",
+      "schema": "CREATE TABLE railway (LOCATION VARCHAR)",
+      "gold": "SELECT LOCATION FROM railway GROUP BY LOCATION HAVING COUNT(*) > 1",
+      "bucket": "complex",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM railway WHERE LOCATION LIKE '%1%' ORDER BY LOCATION;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT * FROM railway WHERE location = 'New York' This query will return all locations that have more than one railway.",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(LOCATION) FROM railway WHERE MORE_ONE()",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(LOCATION) FROM railway WHERE MORE_ONE()",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        }
+      }
+    },
+    {
+      "id": "cb3b7108007d3e9b",
+      "category": "still_wrong",
+      "question": "what is the minimum of 60 -64?",
+      "schema": "CREATE TABLE table_16457934_4 (Id VARCHAR)",
+      "gold": "SELECT MIN(60 AS _to_64) FROM table_16457934_4",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT MIN(id) FROM table_16457934_4;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIN(id) FROM table_16457934_4 WHERE id = 60 AND id = 64;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(60 - 64) FROM table_16457934_4",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(60 - 64) FROM table_16457934_4",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "eb46d4e05ecdfed3",
+      "category": "still_wrong",
+      "question": "Which Medal had a Name of f\u00e9lix s\u00e1nchez, and a Games of 2012 london?",
+      "schema": "CREATE TABLE table_name_43 (medal VARCHAR, name VARCHAR, games VARCHAR)",
+      "gold": "SELECT medal FROM table_name_43 WHERE name = \"f\u00e9lix s\u00e1nchez\" AND games = \"2012 london\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT medals.name, games.name FROM medals JOIN games ON medals.id = games.id WHERE medals.name = 'f\u00e9lix s\u00e1nchez' AND games.name = '2012 london' This query uses the",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MEDAL, name, games FROM table_name_43 WHERE medals = \"f\u00e9lix s\u00e1nchez\" AND games = \"2012 london\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(medal) FROM table_name_43 WHERE name = \"f\u00e9lix s\u00e1nchez\" AND games = \"2012 london\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(medal) FROM table_name_43 WHERE name = \"f\u00e9lix s\u00e1nchez\" AND games = \"2012 london\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "1d8f4b94ab07d9e4",
+      "category": "still_wrong",
+      "question": "what is the listing for 2012 when 2004 is more than 0, 2008 is more than 1 1994 is 8 and 2005 is less than 11?",
+      "schema": "CREATE TABLE table_name_8 (Id VARCHAR)",
+      "gold": "SELECT MIN(2012) FROM table_name_8 WHERE 2004 > 0 AND 2008 > 1 AND 1994 = 8 AND 2005 < 11",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_8 WHERE 2004 > 2005;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT * FROM table_name_8 WHERE id = 2005;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT Id FROM table_name_8 WHERE 2004 > 0 AND 2008 > 1 AND 2005 < 11",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT Id FROM table_name_8 WHERE 2004 > 0 AND 2008 > 1 AND 2005 < 11",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "6b4a9fad5c8456c9",
+      "category": "still_wrong",
+      "question": "How many points did she have with team bultaco, ranked 6th?",
+      "schema": "CREATE TABLE table_name_40 (points INTEGER, team VARCHAR, rank VARCHAR)",
+      "gold": "SELECT SUM(points) FROM table_name_40 WHERE team = \"bultaco\" AND rank = \"6th\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT points FROM table_name_40 WHERE team = 'Bultaco';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT points, team FROM table_name_40 WHERE team = \"bultaco\" AND rank = \"6\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(points) FROM table_name_40 WHERE team = \"bultaco\" AND rank = \"6th\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(points) FROM table_name_40 WHERE team = \"bultaco\" AND rank = \"6th\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "9151419223767b74",
+      "category": "still_wrong",
+      "question": "When was the first beatification in Korea that was canonised before 1984?",
+      "schema": "CREATE TABLE table_name_12 (beatified INTEGER, place VARCHAR, canonised VARCHAR)",
+      "gold": "SELECT MIN(beatified) FROM table_name_12 WHERE place = \"korea\" AND canonised < 1984",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_12 WHERE canonised BETWEEN '1984' AND '1995' ORDER BY beatified DESC LIMIT 10;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_12 WHERE place = \"12\" AND canonised = \"1984\" GROUP BY place;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT beatified FROM table_name_12 WHERE place = \"korea\" AND canonised > 1984",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT beatified FROM table_name_12 WHERE place = \"korea\" AND canonised > 1984",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "91e232e75b7025eb",
+      "category": "still_wrong",
+      "question": "How many Pop (2004) has a Governorate of al mahwit?",
+      "schema": "CREATE TABLE table_name_48 (pop__2004_ INTEGER, governorate VARCHAR)",
+      "gold": "SELECT SUM(pop__2004_) FROM table_name_48 WHERE governorate = \"al mahwit\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_48;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_48 WHERE governorate = 'al mahwit'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(pop__2004_) FROM table_name_48 WHERE governorate = \"al mahwit\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(pop__2004_) FROM table_name_48 WHERE governorate = \"al mahwit\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "656fbc05156fe3a1",
+      "category": "still_wrong",
+      "question": "Where is the longest arch with a length in meters of 63?",
+      "schema": "CREATE TABLE table_name_47 (location VARCHAR, length___m__ VARCHAR)",
+      "gold": "SELECT location FROM table_name_47 WHERE length___m__ = \"63\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT location, length_m_as_string() OVER (PARTITION BY length_m_as_string() OVER (ORDER BY length_m_as_string() OVER (PARTITION BY length_m_as_string() OVER (ORDER BY length_",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT location, length_m__ FROM table_name_47 WHERE length_m__ = 63;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MAX(location) FROM table_name_47 WHERE length___m__ = \"63\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MAX(location) FROM table_name_47 WHERE length___m__ = \"63\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "c14d97fd6c4fbb9e",
+      "category": "still_wrong",
+      "question": "Which districts have at least two addresses?",
+      "schema": "CREATE TABLE address (district VARCHAR)",
+      "gold": "SELECT district FROM address GROUP BY district HAVING COUNT(*) >= 2",
+      "bucket": "complex",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT district FROM address WHERE district LIKE '%2%';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT district FROM address WHERE district = '2nd'",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT district FROM address WHERE two_addresses() = \"at least two\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT district FROM address WHERE two_addresses() = \"at least two\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        }
+      }
+    },
+    {
+      "id": "91488ee4e38ddc4e",
+      "category": "still_wrong",
+      "question": "What is the total amount of money that Payne Stewart has?",
+      "schema": "CREATE TABLE table_name_90 (money___ INTEGER, player VARCHAR)",
+      "gold": "SELECT SUM(money___) AS \u00a3__ FROM table_name_90 WHERE player = \"payne stewart\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_90;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_90 WHERE player = \"PrettyPants\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(money___) FROM table_name_90 WHERE player = \"payton stevens\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(money___) FROM table_name_90 WHERE player = \"payton stevens\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "e4fa6a8c1a66e468",
+      "category": "still_wrong",
+      "question": "What is the USN 2013 ranking with a BW 2013 ranking less than 1000, a Forbes 2011 ranking larger than 17, and a CNN 2011 ranking less than 13?",
+      "schema": "CREATE TABLE table_name_63 (usn_2013 INTEGER, cnn_2011 VARCHAR, bw_2013 VARCHAR, forbes_2011 VARCHAR)",
+      "gold": "SELECT SUM(usn_2013) FROM table_name_63 WHERE bw_2013 < 1000 AND forbes_2011 > 17 AND cnn_2011 < 13",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT bw_2013, cn_2011, FORESTROWS_2011, BW_2013, CNN_2011 FROM table_name_63;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT USN, CCNUM, FOREST, BW, FOREIGN_KEY_ID FROM table_name_63 WHERE USN > 1000 AND CCNUM > 17 AND BW > 13 AND FOREIGN_KEY_ID = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT USN FROM table_name_63 WHERE cnn_2011 < 1000 AND forbes_2011 > 17 AND bw_2013 < 13",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT USN FROM table_name_63 WHERE cnn_2011 < 1000 AND forbes_2011 > 17 AND bw_2013 < 13",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        }
+      }
+    },
+    {
+      "id": "bf96d749dbed43f3",
+      "category": "still_wrong",
+      "question": "Which Time has a Lane smaller than 4, and a Rank larger than 6?",
+      "schema": "CREATE TABLE table_name_94 (time INTEGER, lane VARCHAR, rank VARCHAR)",
+      "gold": "SELECT AVG(time) FROM table_name_94 WHERE lane < 4 AND rank > 6",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT time, lane, rank FROM table_name_94;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT time, lane, rank FROM table_name_94 WHERE time < 4 AND lane < 4 AND rank > 6;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT time FROM table_name_94 WHERE lane = \"4\" AND rank > 6",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT time FROM table_name_94 WHERE lane = \"4\" AND rank > 6",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "bc7c1bee98207c5a",
+      "category": "still_wrong",
+      "question": "What is the total of electors when the share of votes was 11,0%?",
+      "schema": "CREATE TABLE table_name_70 (electors INTEGER, share_of_votes VARCHAR)",
+      "gold": "SELECT SUM(electors) FROM table_name_70 WHERE share_of_votes = \"11,0%\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_70 WHERE share_of_votes = 110;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_70 WHERE share_of_votes = 110;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(electors) FROM table_name_70 WHERE share_of_votes = \"11,0%\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(electors) FROM table_name_70 WHERE share_of_votes = \"11,0%\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "9e9d1c9cc642385c",
+      "category": "still_wrong",
+      "question": "How many townships are there in region number 2?",
+      "schema": "CREATE TABLE table_19457_1 (town_ships INTEGER, no VARCHAR)",
+      "gold": "SELECT MAX(town_ships) FROM table_19457_1 WHERE no = 2",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_19457_1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_19457_1 WHERE town_ships = 2;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(town_ships) FROM table_19457_1 WHERE no = \"2\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(town_ships) FROM table_19457_1 WHERE no = \"2\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "7c178d3ab21c9025",
+      "category": "still_wrong",
+      "question": "How many women speak German?",
+      "schema": "CREATE TABLE table_name_67 (females VARCHAR, language VARCHAR)",
+      "gold": "SELECT females FROM table_name_67 WHERE language = \"german\"",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_67;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_67 WHERE language = \"de\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT COUNT(females) FROM table_name_67 WHERE language = \"de\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT COUNT(females) FROM table_name_67 WHERE language = \"de\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "470cf3d1b994d5ce",
+      "category": "still_wrong",
+      "question": "What are the opening year and staff number of the museum named Plaza Museum?",
+      "schema": "CREATE TABLE museum (Num_of_Staff VARCHAR, Open_Year VARCHAR, name VARCHAR)",
+      "gold": "SELECT Num_of_Staff, Open_Year FROM museum WHERE name = 'Plaza Museum'",
+      "bucket": "simple",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT Open_Year, Staff_Number FROM Museum WHERE Name = 'Plaza Museum';",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MAX(Num_of_Staff) FROM museum WHERE name = \"Plaza Museum\" AND open_year = \"2020\" AND name = \"Plaza Museum\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT Open_Year FROM museum WHERE name = \"Plaza Museum\" AND open_year = \"2020\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT Open_Year FROM museum WHERE name = \"Plaza Museum\" AND open_year = \"2020\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_filter_value"
+        }
+      }
+    },
+    {
+      "id": "e0479b11d799b110",
+      "category": "still_wrong",
+      "question": "What is the game associated with a score of 4 - 2, and a record of 25-39-9?",
+      "schema": "CREATE TABLE table_name_81 (game INTEGER, score VARCHAR, record VARCHAR)",
+      "gold": "SELECT MAX(game) FROM table_name_81 WHERE score = \"4 - 2\" AND record = \"25-39-9\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT game, score, record FROM table_name_81 WHERE score = 4 AND record > 25 This query selects the game, score, and record from the table `table_name_81` where the score is 4 and the record",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT game, score, record FROM table_name_81 WHERE game = 4 AND score = 2 AND record = 25-39-9",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT game FROM table_name_81 WHERE score = 4 - 2 AND record = \"25-39-9\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT game FROM table_name_81 WHERE score = 4 - 2 AND record = \"25-39-9\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "f01095c9ce45de13",
+      "category": "still_wrong",
+      "question": "What is the Upper index Kcal/ Nm 3 of iso-butane, and a Lower index MJ/ Nm 3 smaller than 84.71?",
+      "schema": "CREATE TABLE table_name_59 (upper_index_kcal__nm_3 VARCHAR, fuel_gas VARCHAR, lower_index_mj__nm_3 VARCHAR)",
+      "gold": "SELECT COUNT(upper_index_kcal__nm_3) FROM table_name_59 WHERE fuel_gas = \"iso-butane\" AND lower_index_mj__nm_3 < 84.71",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT * FROM table_name_59 WHERE fuel_gas = 'iso-butane' AND lower_index_mj = '84.71' ORDER BY fuel_gas DESC LIMIT 10;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT UPPER(F1.fuel_gas), LOWER(F1.fuel_gas), UPPER(F2.lower_index_mj__nm_3), LOWER(F2.lower_index_mj__nm_3) AS Lower_index_",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "wrong_table_or_column"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT upper_index_kcal__nm_3 FROM table_name_59 WHERE fuel_gas = \"iso-butane\" AND lower_index_mj__nm_3 < 84.71",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT upper_index_kcal__nm_3 FROM table_name_59 WHERE fuel_gas = \"iso-butane\" AND lower_index_mj__nm_3 < 84.71",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "d0cd405f4462e478",
+      "category": "still_wrong",
+      "question": "What kind of Crowd has a Ground of subiaco oval?",
+      "schema": "CREATE TABLE table_name_41 (crowd INTEGER, ground VARCHAR)",
+      "gold": "SELECT SUM(crowd) FROM table_name_41 WHERE ground = \"subiaco oval\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT DISTINCT (GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GROUP_CONCAT(GRO",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT COUNT(*) FROM table_name_41 WHERE crowd = 1;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT crowd FROM table_name_41 WHERE ground = \"subiaco oval\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT crowd FROM table_name_41 WHERE ground = \"subiaco oval\"",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "wrong_aggregation"
+        }
+      }
+    },
+    {
+      "id": "be4224349a630555",
+      "category": "still_wrong",
+      "question": "what is the least bronze when gold is more than 0 for russia?",
+      "schema": "CREATE TABLE table_name_37 (bronze INTEGER, gold VARCHAR, nation VARCHAR)",
+      "gold": "SELECT MIN(bronze) FROM table_name_37 WHERE gold > 0 AND nation = \"russia\"",
+      "bucket": "medium",
+      "models": {
+        "base_zero_shot": {
+          "prediction": "SELECT b * FROM table_name_37 WHERE b * > 0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": false,
+          "failure_type": "invalid_sql"
+        },
+        "base_few_shot": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_37 WHERE gold > 0;",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_adapter": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_37 WHERE gold > 0",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        },
+        "finetuned_merged": {
+          "prediction": "SELECT MIN(bronze) FROM table_name_37 WHERE gold > 0",
+          "execution_match": false,
+          "exact_match": false,
+          "is_valid": true,
+          "failure_type": "result_mismatch_other"
+        }
+      }
+    }
+  ],
+  "example_pool": {
+    "fixed": [
+      "075250cade485d95",
+      "d5e8dc6842c9bd65",
+      "3c43941674b96d6c",
+      "3cc9a6d3b2878c8d",
+      "d3a991c909cb3416",
+      "02ac4d29b69756aa",
+      "db7c71c55ceeef0b",
+      "9e55c442bacfc7e5",
+      "55c0769e2a3d52e9",
+      "9bfe45f121c919b3",
+      "585ecf72a42ec8ad",
+      "e57f78b2e1f3ed9c",
+      "1048020c15a5f607",
+      "f3ceb352e04f7327",
+      "8c17c5123a001161",
+      "9eafbb297a244097",
+      "6ed4de54eb010a0a",
+      "7f86a64988885099",
+      "5cba04d7631196d9",
+      "0515c2e4dd4337ce",
+      "8bd49a86a278ef74",
+      "11e7766bdad22c69",
+      "1a1af69e735b03fb",
+      "af262ad6fce8ebdb",
+      "0ae66a6897b70b01",
+      "835669f21f6016d6",
+      "7ec7bf427ed30528",
+      "5ce59c19e02a9e2d",
+      "e40ff0200268c584",
+      "ba55a1cdb8aca85d",
+      "3a7ed4a24be9cbaa",
+      "bdb352774faa1ffb",
+      "533a87fd4a387551",
+      "19030fae2375b524",
+      "5a30f12dc652c021",
+      "006a05d3ead5de12",
+      "ded8cfa231a7661d",
+      "60ce0cdf08518c75",
+      "d82c1eea814fcf80",
+      "0031c9041ce5a290",
+      "2001a2f9626d9686",
+      "5ca7bf9a3752a721",
+      "aae556fdec9b77e9",
+      "2d71f621ada388b7",
+      "cb2b517cca904e8e",
+      "734144ccbb3e104a",
+      "3ded65071f8d893d",
+      "6dfeb4857a537116",
+      "e55b651f348196e3",
+      "d6741e4d4095db0b"
+    ],
+    "still_wrong": [
+      "f6c5ed7ddf1cbfba",
+      "114463dd2846b163",
+      "5a18ed90c58312da",
+      "05ad6d6d37ea0962",
+      "44f59ad46238cd32",
+      "abafe0d8de00624f",
+      "344b37d1623cfd99",
+      "857ea5a263676daa",
+      "ed0a16630b383308",
+      "bd6967b6f264b8bc",
+      "0a0c23e9bad92b95",
+      "3df83f31d760166a",
+      "7bdc78aad1909284",
+      "c05eabaa01a7c03c",
+      "277cfbfc9fb657d2",
+      "49b9f28b418a4b30",
+      "5b592e551b544350",
+      "cb3b7108007d3e9b",
+      "eb46d4e05ecdfed3",
+      "1d8f4b94ab07d9e4",
+      "6b4a9fad5c8456c9",
+      "9151419223767b74",
+      "91e232e75b7025eb",
+      "656fbc05156fe3a1",
+      "c14d97fd6c4fbb9e",
+      "91488ee4e38ddc4e",
+      "e4fa6a8c1a66e468",
+      "bf96d749dbed43f3",
+      "bc7c1bee98207c5a",
+      "9e9d1c9cc642385c",
+      "7c178d3ab21c9025",
+      "470cf3d1b994d5ce",
+      "e0479b11d799b110",
+      "f01095c9ce45de13",
+      "d0cd405f4462e478",
+      "be4224349a630555"
+    ],
+    "still_correct": [
+      "499f3a3af95a53f5",
+      "8bd206547a4fe824",
+      "c2bd6ee8df095b50",
+      "e634fb24987754ee",
+      "853f97e68353953c",
+      "b0b11109914d02c7",
+      "a971d1ce8d1f3d10",
+      "84427861b388633d",
+      "59e47bc289b06c17",
+      "f46a9e18f3de0c11",
+      "c446eedd4cc1c518",
+      "83f20f72f25d0b37",
+      "80b47b5cd8bdb3a2",
+      "ad1876c2cdc18d26",
+      "a906f77f4d45b41f",
+      "2f8adae050b32701",
+      "8191bf656b4c064f",
+      "53bf358450e41177",
+      "1da41c574887315c",
+      "1fe5ec1522b30291",
+      "d6b6762cce67b8b5",
+      "5d8c67a3903c2aac",
+      "784e8d5264059da2",
+      "75053ed4741e68f1",
+      "2830adc21edae144",
+      "28fac7816e874b29",
+      "99313d9809a290a7",
+      "54de56b2556ae0d0",
+      "1df677367aa68595",
+      "9da54b8ec5a4b7f3",
+      "c4f01554bea62768",
+      "ff9b810daf866395",
+      "e215c0665188e04c",
+      "f0d773b33a23173e",
+      "84bd81e287232707",
+      "5049a61dbff16850",
+      "602eac6dc1fb5b60",
+      "41b65ef609efcf73",
+      "3ab831e6b952032a",
+      "4039dd6bf9c50d49",
+      "b65bc97f599375b1",
+      "67558f594da31d73",
+      "7c073405cf83f0d0",
+      "4aafc316ba1de8d5",
+      "0bc91730ade63351",
+      "3bc56e4af9d4f338",
+      "2f9003ba5709268c",
+      "1cbf89e02bd39422",
+      "00fe45a55f7e9e18",
+      "ff9b5a0c0e3cda6b"
+    ],
+    "regressed": [
+      "632d44287f7070e4",
+      "d6c7fb745158d114",
+      "a4b248dcdcd6bd3d",
+      "4e60129e79d966a3",
+      "b49229b3adf084b2",
+      "6778587213ad453c",
+      "a534dabdb5322528",
+      "35015ccce4a59445",
+      "a2ec76554bc92d9a"
+    ]
+  },
+  "method": "Heuristic taxonomy from SQL structure: empty output -> extraction_failure; execution error -> invalid_sql / wrong_table_or_column; differing aggregate functions, literals or clause sets explain the rest; otherwise result_mismatch_other.",
+  "env": {
+    "python_version": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.15.0+cpu",
+      "transformers": "5.23.0",
+      "peft": "0.22.0",
+      "accelerate": "1.16.0",
+      "datasets": "5.2.0",
+      "numpy": "2.5.5",
+      "pandas": "3.1.1",
+      "scipy": "1.18.1",
+      "sqlglot": "30.33.0"
+    },
+    "hardware": {
+      "device": "cpu",
+      "platform": "Linux-6.1.102-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "cpu_count_logical": 8,
+      "cpu_count_physical": 8,
+      "ram_total_gb": 15.82,
+      "nvidia_smi": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "vram_gb": null,
+      "capability": null,
+      "precision": {
+        "dtype_name": "float32",
+        "use_grad_scaler": false,
+        "use_autocast": false,
+        "autocast_dtype_name": null,
+        "label": "fp32",
+        "reason": "mixed precision: not used (CPU device: no fp16/bf16 training benefit).",
+        "mixed_precision": false
+      }
+    },
+    "git_commit": "cb9e7fae20749fb946a341a637a95769bb8961cd",
+    "git_dirty": true,
+    "timestamp_utc": "2026-11-21T09:27:54+00:00",
+    "profile": "cpu",
+    "config": {
+      "profile": "cpu",
+      "run": {
+        "seed": 42,
+        "train_seeds": [
+          42
+        ],
+        "tag": "cpu-smollm2-135m"
+      },
+      "model": {
+        "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "max_seq_len": 320,
+        "load_dtype": "auto"
+      },
+      "data": {
+        "dataset": "b-mc2/sql-create-context",
+        "train_size": 1200,
+        "val_size": 200,
+        "test_size": 200,
+        "min_answer_chars": 5,
+        "max_answer_chars": 512,
+        "max_prompt_chars": 2400
+      },
+      "lora": {
+        "r": 16,
+        "alpha": 32,
+        "dropout": 0.05,
+        "target_modules": "auto"
+      },
+      "training": {
+        "num_train_epochs": 3.0,
+        "max_steps": 300,
+        "per_device_train_batch_size": 2,
+        "gradient_accumulation_steps": 2,
+        "learning_rate": 0.0002,
+        "weight_decay": 0.01,
+        "warmup_ratio": 0.03,
+        "lr_scheduler_type": "cosine",
+        "max_grad_norm": 0.3,
+        "gradient_checkpointing": false,
+        "eval_steps": 100,
+        "logging_steps": 10,
+        "save_total_limit": 1,
+        "loss_masking": "completion"
+      },
+      "eval": {
+        "max_new_tokens": 64,
+        "batch_size": 8,
+        "bootstrap_resamples": 1000,
+        "exec_timeout_s": 2.0,
+        "few_shot_k": 3,
+        "arc_subset": 100,
+        "wikitext_slice": 24
+      },
+      "efficiency": {
+        "latency_repeats": 8,
+        "batch_size": 1
+      }
+    }
+  }
+}
