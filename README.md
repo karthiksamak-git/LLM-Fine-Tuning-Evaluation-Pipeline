@@ -9,6 +9,13 @@ Everything that needs compute runs **locally or on a GPU notebook** and writes s
 JSON/PNG artifacts. The dashboard (`web/`, Next.js on Vercel) only renders those files —
 no model inference, no secrets, no server-side training.
 
+**Live dashboard:** <https://llm-finetune-eval.vercel.app> — every page is generated from the
+artifacts in [`web/public/data`](web/public/data), no data is hand-written.
+
+Headline result from the recorded CPU run (200 held-out test examples, execution match):
+zero-shot **19.5%** → 3-shot **45.5%** → fine-tuned LoRA **77.5%** (paired McNemar
+p < 0.0001 against both baselines).
+
 - **Task:** text-to-SQL on [`b-mc2/sql-create-context`](https://huggingface.co/datasets/b-mc2/sql-create-context)
 - **Models (ungated):** `HuggingFaceTB/SmolLM2-135M-Instruct` (CPU profile) and
   `Qwen/Qwen2.5-0.5B-Instruct` (GPU profile)

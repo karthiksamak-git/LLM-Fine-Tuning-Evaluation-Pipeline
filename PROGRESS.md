@@ -55,3 +55,10 @@ Consequences:
 - Loss: train 1.417 -> 0.194; validation 0.1851 -> 0.1705 -> 0.1580 (best at step 300).
 - Merge parity: max |logit diff| 8.8e-05 (tolerance 5e-3) — passed.
 - Peak RSS during training: 2813 MB.
+
+## Deployment
+
+- GitHub: https://github.com/karthiksamak-git/LLM-Fine-Tuning-Evaluation-Pipeline
+- Vercel: https://llm-finetune-eval.vercel.app (project `llm-finetune-eval`, root `web`)
+- Next.js 15.5.4 was rejected by Vercel (CVE-2025-66478); upgraded to 15.5.29.
+- Deployments are git-sourced from `main`; production is public, previews stay SSO-protected.
