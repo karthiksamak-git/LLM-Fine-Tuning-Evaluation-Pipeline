@@ -1,0 +1,31 @@
+# Ablation grids. Every point is selected on the validation split and reported on test
+# only for the final chosen configuration (plus clearly labelled ablation points).
+# `run_ablations` in cli.py merges these on top of the active profile config:
+# sizes are budget-scaled per profile so the CPU profile stays feasible.
+name: ablations
+grids:
+  rank:
+    enabled: true
+    values: [4, 8, 16, 32]      # LoRA r; alpha is kept at 2*r
+  learning_rate:
+    enabled: true
+    values: [0.00005, 0.0001, 0.0003]
+  target_modules:
+    enabled: true
+    values:
+      - attention                # q_proj, k_proj, v_proj, o_proj
+      - all_linear               # attention + gate/up/down projections
+  train_size:
+    enabled: true
+    fractions: [0.05, 0.1, 0.25, 0.5, 1.0]
+  loss_masking:
+    enabled: true
+    values: [completion, full]   # completion-only vs full-sequence loss
+budget:
+  # Training steps used per ablation point (budget scaling) and validation subset size.
+  max_steps_by_profile:
+    cpu: 24
+    gpu: 400
+    smoke: 6
+  val_examples: 48
+  eval_split: val

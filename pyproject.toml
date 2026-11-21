@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlfte"
+version = "0.1.0"
+description = "LLM fine-tuning and evaluation pipeline (LoRA/PEFT) with a static results dashboard"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "llm-finetune-eval contributors" }]
+dependencies = [
+  "torch>=2.4",
+  "transformers>=4.45",
+  "peft>=0.13",
+  "accelerate>=0.34",
+  "datasets>=2.20",
+  "numpy>=1.26",
+  "pandas>=2.0",
+  "scipy>=1.11",
+  "pydantic>=2.7",
+  "pyyaml>=6.0",
+  "matplotlib>=3.8",
+  "seaborn>=0.13",
+  "psutil>=5.9",
+  "py-cpuinfo>=9.0",
+  "tqdm>=4.66",
+  "sqlglot>=25.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.scripts]
+mlfte = "mlfte.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+extend-exclude = ["notebooks", "web", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+ignore = ["E501", "B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]

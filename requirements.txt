@@ -1,0 +1,20 @@
+# Pinned to the exact versions this project was developed and verified against.
+# CPU wheels were used: pip install --index-url https://download.pytorch.org/whl/cpu torch==2.15.0
+torch==2.15.0
+transformers==5.23.0
+peft==0.22.0
+accelerate==1.16.0
+datasets==5.2.0
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1
+pydantic==2.14.4
+PyYAML==6.0.4
+matplotlib==3.11.2
+seaborn==0.13.2
+psutil==7.2.2
+py-cpuinfo==9.0.0
+tqdm==4.70.1
+sqlglot==30.33.0
+pytest==9.2.0
+ruff==0.15.4

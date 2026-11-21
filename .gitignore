@@ -1,0 +1,55 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ---- Node / Next.js ----
+node_modules/
+.next/
+out/
+.turbo/
+web/.vercel
+.vercel/
+*.tsbuildinfo
+npm-debug.log*
+playwright-report/
+test-results/
+
+# ---- Secrets ----
+.env
+.env.*
+!.env.example
+*.pem
+
+# ---- Data / datasets ----
+data/
+results/
+datasets/
+.cache/
+HF_HOME/
+hf_cache/
+
+# ---- Model artifacts (never commit weights) ----
+outputs/
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.zip
+
+# ---- OS / editor ----
+.DS_Store
+.idea/
+.vscode/

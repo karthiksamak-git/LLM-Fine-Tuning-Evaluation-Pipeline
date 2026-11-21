@@ -1,0 +1,52 @@
+# GPU profile — intended for Colab/Kaggle (T4 or better) with >= 8 GB VRAM.
+# Model: Qwen2.5-0.5B-Instruct (ungated, Apache-2.0).
+# Precision is chosen at runtime by src/mlfte/device.py: bf16 autocast when supported,
+# otherwise fp16 + GradScaler with LoRA params cast to fp32.
+profile: gpu
+run:
+  seed: 42
+  train_seeds: [42, 43, 44]
+  tag: gpu-qwen2.5-0.5b
+model:
+  name: Qwen/Qwen2.5-0.5B-Instruct
+  max_seq_len: 512
+  load_dtype: auto
+data:
+  dataset: b-mc2/sql-create-context
+  train_size: 8000
+  val_size: 500
+  test_size: 1000
+  min_answer_chars: 5
+  max_answer_chars: 512
+  max_prompt_chars: 2400
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: auto
+training:
+  num_train_epochs: 2
+  max_steps: -1
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 2
+  learning_rate: 0.0002
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  lr_scheduler_type: cosine
+  max_grad_norm: 0.3
+  gradient_checkpointing: true
+  eval_steps: 200
+  logging_steps: 20
+  save_total_limit: 1
+  loss_masking: completion
+eval:
+  max_new_tokens: 128
+  batch_size: 32
+  bootstrap_resamples: 2000
+  exec_timeout_s: 2.0
+  few_shot_k: 3
+  arc_subset: 400
+  wikitext_slice: 64
+efficiency:
+  latency_repeats: 30
+  batch_size: 1

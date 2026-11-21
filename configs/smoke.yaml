@@ -1,0 +1,49 @@
+# Smoke profile — tiny everything. Used to prove the loop end-to-end and by CI-style checks.
+profile: smoke
+run:
+  seed: 0
+  train_seeds: [0]
+  tag: smoke
+model:
+  name: HuggingFaceTB/SmolLM2-135M-Instruct
+  max_seq_len: 192
+  load_dtype: auto
+data:
+  dataset: b-mc2/sql-create-context
+  train_size: 32
+  val_size: 16
+  test_size: 24
+  min_answer_chars: 5
+  max_answer_chars: 512
+  max_prompt_chars: 2400
+lora:
+  r: 4
+  alpha: 8
+  dropout: 0.0
+  target_modules: auto
+training:
+  num_train_epochs: 1
+  max_steps: 8
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 2
+  learning_rate: 0.0005
+  weight_decay: 0.0
+  warmup_ratio: 0.1
+  lr_scheduler_type: cosine
+  max_grad_norm: 0.3
+  gradient_checkpointing: false
+  eval_steps: 4
+  logging_steps: 1
+  save_total_limit: 1
+  loss_masking: completion
+eval:
+  max_new_tokens: 48
+  batch_size: 4
+  bootstrap_resamples: 200
+  exec_timeout_s: 1.0
+  few_shot_k: 3
+  arc_subset: 8
+  wikitext_slice: 4
+efficiency:
+  latency_repeats: 3
+  batch_size: 1
